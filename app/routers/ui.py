@@ -58,6 +58,7 @@ async def asset_preview(
             "user": user,
             "lookup_type": "asset",
             "lookup_value": tag,
+            "form_type": "checkout",
             "error": error,
         },
     )
@@ -95,6 +96,43 @@ async def user_preview(
             "user": user,
             "lookup_type": "user",
             "lookup_value": username,
+            "form_type": "checkout",
+            "error": error,
+        },
+    )
+
+
+@router.get("/users/{username}/return-preview", response_class=HTMLResponse)
+async def user_return_preview(
+    request: Request,
+    username: str,
+    snipeit: SnipeITDep,
+    labels: LabelsDep,
+    settings: SettingsDep,
+) -> HTMLResponse:
+    error: str | None = None
+    enriched = []
+    user = None
+
+    try:
+        user = await snipeit.get_user_by_username(username)
+        enriched = await snipeit.get_checkin_assets_for_user(user.id)
+
+    except UserNotFound:
+        error = labels.error_not_found
+    except Exception:
+        error = labels.error_generic
+
+    return templates.TemplateResponse(
+        request,
+        "preview.html",
+        {
+            "labels": labels,
+            "enriched": enriched,
+            "user": user,
+            "lookup_type": "user",
+            "lookup_value": username,
+            "form_type": "return",
             "error": error,
         },
     )

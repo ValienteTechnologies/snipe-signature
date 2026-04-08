@@ -51,7 +51,7 @@
           <th>{{ labels.col_model }}</th>
           <th>{{ labels.col_category }}</th>
           <th>{{ labels.col_serial }}</th>
-          <th>{{ labels.col_checkout_date }}</th>
+          <th>{% if form_type == "return" %}{{ labels.col_return_date }}{% else %}{{ labels.col_checkout_date }}{% endif %}</th>
         </tr>
       </thead>
       <tbody>
@@ -79,26 +79,33 @@
   </div>
 
   <div class="actions">
-    {% if user %}
-    <button class="btn btn-primary" onclick="submitForm('checkout')">
-      {{ labels.btn_checkout_form }}
-    </button>
-    <button class="btn btn-secondary" onclick="submitForm('return')">
-      {{ labels.btn_return_form }}
-    </button>
+    {% if form_type == "return" %}
+      <button class="btn btn-secondary" onclick="submitForm('return')">
+        {{ labels.btn_return_form }}
+      </button>
     {% else %}
-    <button class="btn btn-primary" onclick="submitForm('checkout')">
-      {{ labels.btn_checkout_form }}
-    </button>
+      <button class="btn btn-primary" onclick="submitForm('checkout')">
+        {{ labels.btn_checkout_form }}
+      </button>
+      {% if user %}
+      <button class="btn btn-secondary" onclick="goToReturnPreview()">
+        {{ labels.btn_return_form }}
+      </button>
+      {% endif %}
     {% endif %}
   </div>
 </div>
 
 <script>
 const userId = {{ user.id if user else 'null' }};
+const username = {{ ('"' + lookup_value + '"') if lookup_type == "user" else 'null' }};
 
 function toggleAll(cb) {
   document.querySelectorAll('.asset-check').forEach(c => c.checked = cb.checked);
+}
+
+function goToReturnPreview() {
+  if (username) window.location.href = '/users/' + encodeURIComponent(username) + '/return-preview';
 }
 
 function submitForm(type) {

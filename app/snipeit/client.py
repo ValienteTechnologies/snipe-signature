@@ -144,6 +144,36 @@ class SnipeITClient:
     # Enrichment helpers
     # ------------------------------------------------------------------
 
+    async def get_checkin_assets_for_user(self, user_id: int) -> list[AssetWithActivity]:
+        """Return assets that were checked in FROM this user, enriched with the checkin record."""
+        import asyncio
+
+        records = await self.get_last_checkin_for_user(user_id)
+
+        # Deduplicate by asset id, keeping the most recent checkin record per asset
+        seen: dict[int, ActivityRecord] = {}
+        for r in records:
+            if r.item and r.item.id and r.item.type == "asset":
+                if r.item.id not in seen:
+                    seen[r.item.id] = r
+
+        if not seen:
+            return []
+
+        async def _fetch(asset_id: int, record: ActivityRecord) -> AssetWithActivity | None:
+            try:
+                asset = await self.get_asset_by_id(asset_id)
+            except SnipeITError:
+                return None
+            return AssetWithActivity(
+                asset=asset,
+                admin_name=record.admin_name,
+                activity_date=record.created_at_datetime,
+            )
+
+        results = await asyncio.gather(*[_fetch(aid, rec) for aid, rec in seen.items()])
+        return [r for r in results if r is not None]
+
     async def enrich_assets_with_checkout(self, assets: list[Asset]) -> list[AssetWithActivity]:
         """Fetch the last checkout record for each asset concurrently."""
         import asyncio

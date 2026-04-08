@@ -27,12 +27,13 @@ def _parse_snipeit_date(v: object) -> datetime | None:
 
 
 class NamedValue(BaseModel):
-    """A generic {id, name} pair used throughout the Snipe-IT API."""
+    """A generic {id, name, type} object used throughout the Snipe-IT API."""
 
     model_config = {"extra": "ignore"}
 
     id: int | None = None
     name: str | None = None
+    type: str | None = None  # e.g. "asset", "user" — present on item/target fields
 
 
 class Asset(BaseModel):
@@ -98,7 +99,6 @@ class ActivityRecord(BaseModel):
     id: int
     action_type: str | None = None
     item: NamedValue | None = None
-    item_type: str | None = None
     target: NamedValue | None = None
     admin: NamedValue | None = None
     note: str | None = None
