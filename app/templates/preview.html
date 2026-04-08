@@ -9,13 +9,6 @@
       onchange="toggleAll(this, '{{ form_type }}')">
     {{ labels.select_all }}
   </label>
-  <span class="spacer"></span>
-  <span class="format-label">{{ labels.format_label }}:</span>
-  <select id="fmt-{{ form_type }}" class="input input-sm">
-    <option value="both">DOCX + PDF</option>
-    <option value="pdf">PDF only</option>
-    <option value="docx">DOCX only</option>
-  </select>
 </div>
 <div class="table-wrapper">
   <table class="asset-table">
@@ -93,9 +86,8 @@
     {% if checkout_enriched %}
       {{ asset_table(checkout_enriched, "checkout", labels) }}
       <div class="actions">
-        <button class="btn btn-primary" onclick="submitForm('checkout')">
-          {{ labels.btn_checkout_form }}
-        </button>
+        <button class="btn btn-outline-primary" onclick="submitForm('checkout', 'docx')">DOCX</button>
+        <button class="btn btn-primary" onclick="submitForm('checkout', 'pdf')">PDF</button>
       </div>
     {% else %}
       <div class="alert alert-info" style="margin-top:1rem">{{ labels.no_assets }}</div>
@@ -106,9 +98,8 @@
     {% if return_enriched %}
       {{ asset_table(return_enriched, "return", labels) }}
       <div class="actions">
-        <button class="btn btn-secondary" onclick="submitForm('return')">
-          {{ labels.btn_return_form }}
-        </button>
+        <button class="btn btn-outline-secondary" onclick="submitForm('return', 'docx')">DOCX</button>
+        <button class="btn btn-secondary" onclick="submitForm('return', 'pdf')">PDF</button>
       </div>
     {% else %}
       <div class="alert alert-info" style="margin-top:1rem">{{ labels.no_assets }}</div>
@@ -120,9 +111,8 @@
   {% if checkout_enriched %}
     {{ asset_table(checkout_enriched, "checkout", labels) }}
     <div class="actions">
-      <button class="btn btn-primary" onclick="submitForm('checkout')">
-        {{ labels.btn_checkout_form }}
-      </button>
+      <button class="btn btn-outline-primary" onclick="submitForm('checkout', 'docx')">DOCX</button>
+      <button class="btn btn-primary" onclick="submitForm('checkout', 'pdf')">PDF</button>
     </div>
   {% else %}
     <div class="alert alert-info" style="margin-top:1rem">{{ labels.no_assets }}</div>
@@ -149,11 +139,10 @@ function toggleAll(cb, formType) {
   document.querySelectorAll('.asset-check-' + formType).forEach(c => c.checked = cb.checked);
 }
 
-function submitForm(type) {
+function submitForm(type, fmt) {
   const ids = Array.from(document.querySelectorAll('.asset-check-' + type + ':checked'))
     .map(c => parseInt(c.value));
   if (!ids.length) { alert('Select at least one asset.'); return; }
-  const fmt = document.getElementById('fmt-' + type).value;
   const body = { asset_ids: ids };
   if (userId !== null) body.user_id = userId;
 
