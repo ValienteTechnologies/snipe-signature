@@ -32,6 +32,7 @@ class Labels:
     error_not_found: str
     error_generic: str
     no_assets: str
+    no_returned_assets: str
     select_all: str
     deselect_all: str
     format_label: str

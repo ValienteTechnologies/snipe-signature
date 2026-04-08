@@ -23,6 +23,7 @@ TR_LABELS = Labels(
     error_not_found="Bulunamadı. Lütfen etiketi veya kullanıcı adını kontrol edin.",
     error_generic="Beklenmeyen bir hata oluştu. Lütfen tekrar deneyin.",
     no_assets="Bu kullanıcıya zimmetli demirbaş bulunmamaktadır.",
+    no_returned_assets="Bu kullanıcı için son iade edilmiş demirbaş bulunamadı.",
     select_all="Tümünü seç",
     deselect_all="Seçimi kaldır",
     format_label="İndirme formatı",

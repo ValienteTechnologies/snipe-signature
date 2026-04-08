@@ -23,6 +23,7 @@ EN_LABELS = Labels(
     error_not_found="Not found. Please check the asset tag or username.",
     error_generic="An unexpected error occurred. Please try again.",
     no_assets="This user has no checked-out assets.",
+    no_returned_assets="No recently checked-in assets found for this user.",
     select_all="Select all",
     deselect_all="Deselect all",
     format_label="Download format",
