@@ -86,8 +86,8 @@
     {% if checkout_enriched %}
       {{ asset_table(checkout_enriched, "checkout", labels) }}
       <div class="actions">
-        <button class="btn btn-outline-primary" onclick="submitForm('checkout', 'docx')">DOCX</button>
-        <button class="btn btn-primary" onclick="submitForm('checkout', 'pdf')">PDF</button>
+        <button class="btn btn-docx" onclick="submitForm('checkout', 'docx')">DOCX</button>
+        <button class="btn btn-pdf" onclick="submitForm('checkout', 'pdf')">PDF</button>
       </div>
     {% else %}
       <div class="alert alert-info" style="margin-top:1rem">{{ labels.no_assets }}</div>
@@ -98,8 +98,8 @@
     {% if return_enriched %}
       {{ asset_table(return_enriched, "return", labels) }}
       <div class="actions">
-        <button class="btn btn-outline-secondary" onclick="submitForm('return', 'docx')">DOCX</button>
-        <button class="btn btn-secondary" onclick="submitForm('return', 'pdf')">PDF</button>
+        <button class="btn btn-docx" onclick="submitForm('return', 'docx')">DOCX</button>
+        <button class="btn btn-pdf" onclick="submitForm('return', 'pdf')">PDF</button>
       </div>
     {% else %}
       <div class="alert alert-info" style="margin-top:1rem">{{ labels.no_assets }}</div>

@@ -163,8 +163,8 @@ body {
   display: flex;
   gap: .75rem;
   margin-top: 1.25rem;
-  flex-wrap: wrap;
 }
+.actions .btn { flex: 1; }
 
 /* Tabs */
 .tabs {
