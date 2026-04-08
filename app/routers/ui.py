@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import contextlib
+from pathlib import Path
 
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
@@ -11,16 +12,15 @@ from fastapi.templating import Jinja2Templates
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
 from app.snipeit.client import AssetNotFound, UserNotFound
 
+_TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
 
 
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request, labels: LabelsDep) -> HTMLResponse:
-    return templates.TemplateResponse(
-        "index.html",
-        {"request": request, "labels": labels},
-    )
+    return templates.TemplateResponse(request, "index.html", {"labels": labels})
 
 
 @router.get("/assets/{tag}/preview", response_class=HTMLResponse)
@@ -50,9 +50,9 @@ async def asset_preview(
         error = labels.error_generic
 
     return templates.TemplateResponse(
+        request,
         "preview.html",
         {
-            "request": request,
             "labels": labels,
             "enriched": enriched,
             "user": user,
@@ -87,9 +87,9 @@ async def user_preview(
         error = labels.error_generic
 
     return templates.TemplateResponse(
+        request,
         "preview.html",
         {
-            "request": request,
             "labels": labels,
             "enriched": enriched,
             "user": user,
