@@ -3,6 +3,8 @@ from app.i18n import Labels
 EN_LABELS = Labels(
     # UI
     page_title="Snipe-IT Signature Forms",
+    tab_asset="Asset",
+    tab_user="User",
     search_placeholder_tag="Asset tag (e.g. 00173)",
     search_placeholder_user="Username (e.g. j.doe)",
     btn_lookup_asset="Look up asset",

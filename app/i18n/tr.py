@@ -3,6 +3,8 @@ from app.i18n import Labels
 TR_LABELS = Labels(
     # UI
     page_title="Snipe-IT İmza Formları",
+    tab_asset="Demirbaş",
+    tab_user="Kullanıcı",
     search_placeholder_tag="Demirbaş etiketi (ör. 00173)",
     search_placeholder_user="Kullanıcı adı (ör. a.yilmaz)",
     btn_lookup_asset="Demirbaşı Ara",

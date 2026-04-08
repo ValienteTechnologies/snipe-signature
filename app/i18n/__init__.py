@@ -12,6 +12,8 @@ Lang = Literal["en", "tr"]
 class Labels:
     # UI
     page_title: str
+    tab_asset: str
+    tab_user: str
     search_placeholder_tag: str
     search_placeholder_user: str
     btn_lookup_asset: str
