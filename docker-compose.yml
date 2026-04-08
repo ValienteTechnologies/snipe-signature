@@ -1,0 +1,17 @@
+services:
+  snipe-signature:
+    build: .
+    ports:
+      - "${APP_PORT:-8000}:8000"
+    env_file:
+      - .env
+    volumes:
+      # Mount a custom logo if set via LOGO_PATH
+      - "${LOGO_PATH:-/dev/null}:${LOGO_PATH:-/dev/null}:ro"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s

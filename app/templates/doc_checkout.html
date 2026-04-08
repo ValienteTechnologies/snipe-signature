@@ -1,0 +1,70 @@
+{% extends "doc_base.html" %}
+{% block content %}
+<div class="header">
+  {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
+  <div class="header-text">
+    <h1>{{ labels.doc_checkout_title }}</h1>
+    <div class="subtitle">{{ user.display_name }} &mdash; {{ generated_at }}</div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>{{ labels.col_asset_tag }}</th>
+      <th>{{ labels.col_name }}</th>
+      <th>{{ labels.col_manufacturer }}</th>
+      <th>{{ labels.col_model }}</th>
+      <th>{{ labels.col_category }}</th>
+      <th>{{ labels.col_serial }}</th>
+      <th>{{ labels.col_checkout_date }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in enriched %}
+    {% set asset = item.asset %}
+    <tr>
+      <td>{{ asset.asset_tag }}</td>
+      <td>{{ asset.name or "-" }}</td>
+      <td>{{ asset.manufacturer_name }}</td>
+      <td>{{ asset.model_name }}</td>
+      <td>{{ asset.category_name }}</td>
+      <td>{{ asset.serial_display }}</td>
+      <td>
+        {% if item.activity_date %}
+          {{ item.activity_date.strftime("%Y-%m-%d") }}
+        {% elif asset.last_checkout %}
+          {{ asset.last_checkout.strftime("%Y-%m-%d") }}
+        {% else %}-{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% set admin_names = enriched | map(attribute='admin_name') | select | unique | list %}
+{% set admin_display = admin_names[0] if admin_names | length == 1 else "" %}
+
+<table class="sig-table">
+  <thead>
+    <tr>
+      <th>{{ labels.doc_issued_by }}</th>
+      <th>{{ labels.doc_received_by }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="sig-name-row">
+      <td>{{ labels.doc_name_surname }}</td>
+      <td>{{ labels.doc_name_surname }}</td>
+    </tr>
+    <tr>
+      <td>{{ admin_display }}</td>
+      <td>{{ user.display_name }}</td>
+    </tr>
+    <tr class="sig-line-row">
+      <td>{{ labels.doc_date }}: _______________ &nbsp;&nbsp; {{ labels.doc_signature }}: _______________</td>
+      <td>{{ labels.doc_date }}: _______________ &nbsp;&nbsp; {{ labels.doc_signature }}: _______________</td>
+    </tr>
+  </tbody>
+</table>
+{% endblock %}

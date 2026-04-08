@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="back-link"><a href="/">&larr; Back to search</a></div>
+
+{% if error %}
+  <div class="alert alert-error">{{ error }}</div>
+{% elif not enriched %}
+  <div class="alert alert-info">
+    {% if user %}{{ labels.no_assets }}{% else %}{{ labels.error_not_found }}{% endif %}
+  </div>
+{% else %}
+
+<div class="card">
+  <div class="preview-header">
+    {% if user %}
+      <h2>{{ user.display_name }}
+        {% if user.username and user.username != user.display_name %}
+          <small class="text-muted">({{ user.username }})</small>
+        {% endif %}
+      </h2>
+      {% if user.department %}
+        <p class="text-muted">{{ user.department.name }}</p>
+      {% endif %}
+    {% elif lookup_type == "asset" %}
+      <h2>Asset: {{ lookup_value }}</h2>
+    {% endif %}
+  </div>
+
+  <div class="toolbar">
+    <label>
+      <input type="checkbox" id="select-all" checked onchange="toggleAll(this)">
+      {{ labels.select_all }}
+    </label>
+    <span class="spacer"></span>
+    <span class="format-label">{{ labels.format_label }}:</span>
+    <select id="fmt-select" class="input input-sm">
+      <option value="both">DOCX + PDF</option>
+      <option value="pdf">PDF only</option>
+      <option value="docx">DOCX only</option>
+    </select>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="asset-table">
+      <thead>
+        <tr>
+          <th class="col-check"></th>
+          <th>{{ labels.col_asset_tag }}</th>
+          <th>{{ labels.col_name }}</th>
+          <th>{{ labels.col_manufacturer }}</th>
+          <th>{{ labels.col_model }}</th>
+          <th>{{ labels.col_category }}</th>
+          <th>{{ labels.col_serial }}</th>
+          <th>{{ labels.col_checkout_date }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in enriched %}
+        {% set asset = item.asset %}
+        <tr>
+          <td><input type="checkbox" class="asset-check" value="{{ asset.id }}" checked></td>
+          <td>{{ asset.asset_tag }}</td>
+          <td>{{ asset.name or "-" }}</td>
+          <td>{{ asset.manufacturer_name }}</td>
+          <td>{{ asset.model_name }}</td>
+          <td>{{ asset.category_name }}</td>
+          <td>{{ asset.serial_display }}</td>
+          <td>
+            {% if item.activity_date %}
+              {{ item.activity_date.strftime("%Y-%m-%d") }}
+            {% elif asset.last_checkout %}
+              {{ asset.last_checkout.strftime("%Y-%m-%d") }}
+            {% else %}-{% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="actions">
+    {% if user %}
+    <button class="btn btn-primary" onclick="submitForm('checkout')">
+      {{ labels.btn_checkout_form }}
+    </button>
+    <button class="btn btn-secondary" onclick="submitForm('return')">
+      {{ labels.btn_return_form }}
+    </button>
+    {% else %}
+    <button class="btn btn-primary" onclick="submitForm('checkout')">
+      {{ labels.btn_checkout_form }}
+    </button>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+const userId = {{ user.id if user else 'null' }};
+
+function toggleAll(cb) {
+  document.querySelectorAll('.asset-check').forEach(c => c.checked = cb.checked);
+}
+
+function submitForm(type) {
+  const ids = Array.from(document.querySelectorAll('.asset-check:checked')).map(c => parseInt(c.value));
+  if (!ids.length) { alert('Select at least one asset.'); return; }
+  const fmt = document.getElementById('fmt-select').value;
+  const body = { asset_ids: ids };
+  if (userId !== null) body.user_id = userId;
+
+  fetch('/forms/' + type + '?fmt=' + fmt, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  .then(resp => {
+    if (!resp.ok) return resp.json().then(d => { throw new Error(d.detail || 'Error'); });
+    return resp.blob().then(blob => {
+      const cd = resp.headers.get('Content-Disposition') || '';
+      const match = cd.match(/filename="(.+?)"/);
+      const filename = match ? match[1] : type + '_form';
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = filename; a.click();
+      URL.revokeObjectURL(url);
+    });
+  })
+  .catch(err => alert('Error: ' + err.message));
+}
+</script>
+{% endif %}
+{% endblock %}

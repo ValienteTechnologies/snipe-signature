@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card search-card">
+  <h2>Asset Lookup</h2>
+  <form method="get" action="#" id="asset-form">
+    <div class="input-group">
+      <input
+        type="text"
+        name="tag"
+        id="tag-input"
+        placeholder="{{ labels.search_placeholder_tag }}"
+        autocomplete="off"
+        class="input"
+      >
+      <button type="button" class="btn btn-primary" onclick="lookupAsset()">
+        {{ labels.btn_lookup_asset }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="card search-card" style="margin-top:1rem;">
+  <h2>User Lookup</h2>
+  <form method="get" action="#" id="user-form">
+    <div class="input-group">
+      <input
+        type="text"
+        name="username"
+        id="user-input"
+        placeholder="{{ labels.search_placeholder_user }}"
+        autocomplete="off"
+        class="input"
+      >
+      <button type="button" class="btn btn-primary" onclick="lookupUser()">
+        {{ labels.btn_lookup_user }}
+      </button>
+    </div>
+  </form>
+</div>
+
+<script>
+function lookupAsset() {
+  const tag = document.getElementById('tag-input').value.trim();
+  if (tag) window.location.href = '/assets/' + encodeURIComponent(tag) + '/preview';
+}
+function lookupUser() {
+  const user = document.getElementById('user-input').value.trim();
+  if (user) window.location.href = '/users/' + encodeURIComponent(user) + '/preview';
+}
+document.getElementById('tag-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') lookupAsset();
+});
+document.getElementById('user-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') lookupUser();
+});
+</script>
+{% endblock %}

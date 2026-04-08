@@ -1,0 +1,170 @@
+:root {
+  --color-primary: #3d5a80;
+  --color-primary-hover: #2c4560;
+  --color-secondary: #6c757d;
+  --color-secondary-hover: #555d64;
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-border: #dee2e6;
+  --color-text: #212529;
+  --color-muted: #6c757d;
+  --color-error-bg: #f8d7da;
+  --color-error-border: #f5c2c7;
+  --color-info-bg: #d1ecf1;
+  --color-info-border: #bee5eb;
+  --radius: 6px;
+  --shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 15px;
+  background: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Header */
+.site-header {
+  background: var(--color-primary);
+  color: #fff;
+  padding: .75rem 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,.15);
+}
+.site-title {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+/* Cards */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+}
+.card h2 {
+  margin: 0 0 1rem;
+  font-size: 1.05rem;
+  color: var(--color-primary);
+}
+
+/* Inputs */
+.input {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  padding: .45rem .75rem;
+  font-size: .95rem;
+  outline: none;
+  transition: border-color .15s;
+}
+.input:focus { border-color: var(--color-primary); }
+.input-sm { padding: .3rem .6rem; font-size: .875rem; }
+
+.input-group {
+  display: flex;
+  gap: .5rem;
+}
+.input-group .input { flex: 1; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .45rem 1rem;
+  border: none;
+  border-radius: var(--radius);
+  font-size: .9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s, transform .05s;
+  white-space: nowrap;
+}
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--color-primary); color: #fff; }
+.btn-primary:hover { background: var(--color-primary-hover); }
+.btn-secondary { background: var(--color-secondary); color: #fff; }
+.btn-secondary:hover { background: var(--color-secondary-hover); }
+
+/* Alerts */
+.alert {
+  padding: .75rem 1rem;
+  border-radius: var(--radius);
+  margin-top: 1rem;
+  font-size: .9rem;
+}
+.alert-error { background: var(--color-error-bg); border: 1px solid var(--color-error-border); color: #842029; }
+.alert-info { background: var(--color-info-bg); border: 1px solid var(--color-info-border); color: #0c5460; }
+
+/* Back link */
+.back-link { margin-top: 1rem; }
+.back-link a { color: var(--color-primary); text-decoration: none; font-size: .9rem; }
+.back-link a:hover { text-decoration: underline; }
+
+/* Preview page */
+.preview-header { margin-bottom: 1rem; }
+.preview-header h2 { margin: 0; font-size: 1.2rem; }
+.text-muted { color: var(--color-muted); font-size: .875rem; }
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  margin-bottom: .75rem;
+  flex-wrap: wrap;
+}
+.spacer { flex: 1; }
+.format-label { font-size: .875rem; color: var(--color-muted); }
+
+/* Table */
+.table-wrapper { overflow-x: auto; }
+.asset-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .875rem;
+}
+.asset-table th {
+  background: var(--color-primary);
+  color: #fff;
+  padding: .5rem .6rem;
+  text-align: left;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.asset-table td {
+  padding: .45rem .6rem;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+.asset-table tbody tr:hover td { background: #f0f4f8; }
+.col-check { width: 36px; }
+
+/* Actions bar */
+.actions {
+  display: flex;
+  gap: .75rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .input-group { flex-direction: column; }
+  .actions { flex-direction: column; }
+  .btn { width: 100%; }
+}
