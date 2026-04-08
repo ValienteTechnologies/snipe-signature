@@ -35,7 +35,7 @@ def build_checkout_pdf(
     from datetime import datetime
 
     resolved_logo = resolve_logo(logo_path)
-    logo_uri = resolved_logo.as_uri() if resolved_logo else None
+    logo_uri = resolved_logo.resolve().as_uri() if resolved_logo else None
 
     return _render_pdf(
         "doc_checkout.html",
@@ -58,7 +58,7 @@ def build_return_pdf(
     from datetime import datetime
 
     resolved_logo = resolve_logo(logo_path)
-    logo_uri = resolved_logo.as_uri() if resolved_logo else None
+    logo_uri = resolved_logo.resolve().as_uri() if resolved_logo else None
     today_str = datetime.now().strftime("%Y-%m-%d")
 
     return _render_pdf(
