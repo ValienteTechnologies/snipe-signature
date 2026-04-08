@@ -51,6 +51,11 @@ def build_return_docx(
     sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
     sub.runs[0].font.size = Pt(10)
 
+    # Condition note
+    note = doc.add_paragraph(labels.doc_condition_note)
+    note.runs[0].font.size = Pt(9)
+    note.runs[0].italic = True
+
     doc.add_paragraph()
 
     # Asset table — uses return date (today) instead of checkout date

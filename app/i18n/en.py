@@ -27,6 +27,8 @@ EN_LABELS = Labels(
     select_all="Select all",
     deselect_all="Deselect all",
     format_label="Download format",
+    # Document — shared
+    doc_condition_note="The assets listed below have been inspected and are in working condition.",
     # Document — checkout
     doc_checkout_title="Asset Delivery Receipt",
     doc_issued_by="Issued By",

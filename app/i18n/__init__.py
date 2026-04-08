@@ -37,6 +37,9 @@ class Labels:
     deselect_all: str
     format_label: str
 
+    # Document — shared
+    doc_condition_note: str
+
     # Document — checkout
     doc_checkout_title: str
     doc_issued_by: str

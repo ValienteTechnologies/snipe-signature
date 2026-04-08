@@ -27,6 +27,8 @@ TR_LABELS = Labels(
     select_all="Tümünü seç",
     deselect_all="Seçimi kaldır",
     format_label="İndirme formatı",
+    # Document — shared
+    doc_condition_note="Aşağıda listelenen demirbaşlar kontrol edilmiş olup çalışır durumdadır.",
     # Document — checkout
     doc_checkout_title="Zimmet Tutanağı",
     doc_issued_by="Teslim Eden",
