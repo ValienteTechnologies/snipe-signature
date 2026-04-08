@@ -125,16 +125,6 @@ body {
 .preview-header h2 { margin: 0; font-size: 1.2rem; }
 .text-muted { color: var(--color-muted); font-size: .875rem; }
 
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  margin-bottom: .75rem;
-  flex-wrap: wrap;
-}
-.spacer { flex: 1; }
-.format-label { font-size: .875rem; color: var(--color-muted); }
-
 /* Table */
 .table-wrapper { overflow-x: auto; }
 .asset-table {

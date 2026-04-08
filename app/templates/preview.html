@@ -3,18 +3,14 @@
 
 {# ---- macro must be defined before first use in Jinja2 ---- #}
 {% macro asset_table(enriched, form_type, labels) %}
-<div class="toolbar">
-  <label>
-    <input type="checkbox" class="select-all-cb" checked
-      onchange="toggleAll(this, '{{ form_type }}')">
-    {{ labels.select_all }}
-  </label>
-</div>
 <div class="table-wrapper">
   <table class="asset-table">
     <thead>
       <tr>
-        <th class="col-check"></th>
+        <th class="col-check">
+          <input type="checkbox" class="select-all-cb" checked
+            onchange="toggleAll(this, '{{ form_type }}')" title="{{ labels.select_all }}">
+        </th>
         <th>{{ labels.col_asset_tag }}</th>
         <th>{{ labels.col_name }}</th>
         <th>{{ labels.col_manufacturer }}</th>
