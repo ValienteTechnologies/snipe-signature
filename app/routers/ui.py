@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 import contextlib
 from pathlib import Path
 
@@ -37,8 +38,7 @@ async def asset_preview(
 
     try:
         asset = await snipeit.get_asset_by_tag(tag)
-        enriched_list = await snipeit.enrich_assets_with_checkout([asset])
-        enriched = enriched_list
+        enriched = await snipeit.enrich_assets_with_checkout([asset])
 
         if asset.assigned_to and asset.assigned_to.id:
             with contextlib.suppress(Exception):
@@ -54,11 +54,11 @@ async def asset_preview(
         "preview.html",
         {
             "labels": labels,
-            "enriched": enriched,
+            "checkout_enriched": enriched,
+            "return_enriched": None,  # asset tag lookup has no return tab
             "user": user,
             "lookup_type": "asset",
             "lookup_value": tag,
-            "form_type": "checkout",
             "error": error,
         },
     )
@@ -73,14 +73,18 @@ async def user_preview(
     settings: SettingsDep,
 ) -> HTMLResponse:
     error: str | None = None
-    enriched = []
+    checkout_enriched = []
+    return_enriched = []
     user = None
 
     try:
         user = await snipeit.get_user_by_username(username)
-        assets = await snipeit.get_user_assets(user.id)
+        assets, return_enriched = await asyncio.gather(
+            snipeit.get_user_assets(user.id),
+            snipeit.get_checkin_assets_for_user(user.id),
+        )
         if assets:
-            enriched = await snipeit.enrich_assets_with_checkout(assets)
+            checkout_enriched = await snipeit.enrich_assets_with_checkout(assets)
 
     except UserNotFound:
         error = labels.error_not_found
@@ -92,47 +96,11 @@ async def user_preview(
         "preview.html",
         {
             "labels": labels,
-            "enriched": enriched,
+            "checkout_enriched": checkout_enriched,
+            "return_enriched": return_enriched,
             "user": user,
             "lookup_type": "user",
             "lookup_value": username,
-            "form_type": "checkout",
-            "error": error,
-        },
-    )
-
-
-@router.get("/users/{username}/return-preview", response_class=HTMLResponse)
-async def user_return_preview(
-    request: Request,
-    username: str,
-    snipeit: SnipeITDep,
-    labels: LabelsDep,
-    settings: SettingsDep,
-) -> HTMLResponse:
-    error: str | None = None
-    enriched = []
-    user = None
-
-    try:
-        user = await snipeit.get_user_by_username(username)
-        enriched = await snipeit.get_checkin_assets_for_user(user.id)
-
-    except UserNotFound:
-        error = labels.error_not_found
-    except Exception:
-        error = labels.error_generic
-
-    return templates.TemplateResponse(
-        request,
-        "preview.html",
-        {
-            "labels": labels,
-            "enriched": enriched,
-            "user": user,
-            "lookup_type": "user",
-            "lookup_value": username,
-            "form_type": "return",
             "error": error,
         },
     )
