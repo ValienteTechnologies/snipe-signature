@@ -20,7 +20,6 @@ class Settings(BaseSettings):
     app_lang: Literal["en", "tr"] = "en"
     app_host: str = "0.0.0.0"
     app_port: int = 8000
-    app_root_path: str = ""
 
     # Branding — path to a logo image used in generated documents
     logo_path: Path | None = None
