@@ -49,7 +49,7 @@ def build_checkout_docx(
 
     # Subtitle: user name + generated timestamp
     now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
-    sub = doc.add_paragraph(f"{user.display_name}  —  {now_str}")
+    sub = doc.add_paragraph(now_str)
     sub.alignment = WD_ALIGN_PARAGRAPH.CENTER
     sub.runs[0].font.size = Pt(10)
 

@@ -23,7 +23,9 @@ def test_checkout_docx_creates_file(sample_user: User, sample_enriched: AssetWit
 def test_checkout_docx_content(sample_user: User, sample_enriched: AssetWithActivity) -> None:
     path = build_checkout_docx([sample_enriched], sample_user, EN)
     doc = Document(str(path))
-    full_text = "\n".join(p.text for p in doc.paragraphs)
+    para_text = "\n".join(p.text for p in doc.paragraphs)
+    cell_text = "\n".join(c.text for tbl in doc.tables for row in tbl.rows for c in row.cells)
+    full_text = para_text + "\n" + cell_text
     assert EN.doc_checkout_title in full_text
     assert sample_user.display_name in full_text
     path.unlink()
