@@ -24,6 +24,9 @@ TR_LABELS = Labels(
     no_assets="Bu kullanıcıya zimmetli demirbaş bulunmamaktadır.",
     no_returned_assets="Bu kullanıcı için son iade edilmiş demirbaş bulunamadı.",
     select_all="Tümünü seç",
+    back_to_search="← Aramaya dön",
+    drawer_language="Dil",
+    drawer_template="Şablon",
     # Document — shared
     doc_condition_note="Aşağıda listelenen demirbaşlar çalışır durumda teslim edilmiştir.",
     # Document — checkout

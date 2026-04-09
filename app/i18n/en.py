@@ -24,6 +24,9 @@ EN_LABELS = Labels(
     no_assets="This user has no checked-out assets.",
     no_returned_assets="No recently checked-in assets found for this user.",
     select_all="Select all",
+    back_to_search="← Back to search",
+    drawer_language="Language",
+    drawer_template="Template",
     # Document — shared
     doc_condition_note="The assets listed below have been delivered in working condition.",
     # Document — checkout

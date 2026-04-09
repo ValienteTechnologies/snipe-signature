@@ -14,14 +14,14 @@
   </div>
   <div class="drawer-body">
     <div class="drawer-section">
-      <span class="drawer-label">Language</span>
+      <span class="drawer-label">{{ labels.drawer_language }}</span>
       <select class="input drawer-select" id="lang-select" onchange="setLang(this.value)">
         <option value="en">English</option>
         <option value="tr">Türkçe</option>
       </select>
     </div>
     <div class="drawer-section">
-      <span class="drawer-label">Template</span>
+      <span class="drawer-label">{{ labels.drawer_template }}</span>
       <select class="input drawer-select" id="tmpl-select" onchange="setTemplate(this.value)">
         {% for tid, tlabel in doc_templates %}
         <option value="{{ tid }}">{{ tlabel }}</option>

@@ -33,6 +33,9 @@ class Labels:
     no_assets: str
     no_returned_assets: str
     select_all: str
+    back_to_search: str
+    drawer_language: str
+    drawer_template: str
 
     # Document — shared
     doc_condition_note: str
