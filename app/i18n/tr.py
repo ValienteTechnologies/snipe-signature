@@ -25,7 +25,7 @@ TR_LABELS = Labels(
     no_returned_assets="Bu kullanıcı için son iade edilmiş demirbaş bulunamadı.",
     select_all="Tümünü seç",
     # Document — shared
-    doc_condition_note="Aşağıda listelenen demirbaşlar kontrol edilmiş olup çalışır durumdadır.",
+    doc_condition_note="Aşağıda listelenen demirbaşlar çalışır durumda teslim edilmiştir.",
     # Document — checkout
     doc_checkout_title="Zimmet Tutanağı",
     doc_issued_by="Teslim Eden",

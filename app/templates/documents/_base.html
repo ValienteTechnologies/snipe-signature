@@ -14,15 +14,33 @@
     }
     {% endif %}
   }
+  html { height: 100%; }
   body {
     font-family: "DejaVu Sans", Arial, sans-serif;
-    font-size: 9pt;
+    font-size: 11pt;
     color: #1a1a1a;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  .content-wrap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .body-center {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
   }
 {% block extra_styles %}{% endblock %}
 </style>
 </head>
 <body>
+<div class="content-wrap">
 {% block content %}{% endblock %}
+</div>
 </body>
 </html>

@@ -6,28 +6,28 @@
     align-items: center;
     margin-bottom: 10px;
   }
-  .eve-header img { max-height: 72px; }
-  .eve-date { font-size: 8.5pt; color: #555; }
+  .eve-header img { max-height: 80px; }
+  .eve-date { font-size: 10pt; color: #555; }
   .eve-title {
     text-align: center;
-    font-size: 20pt;
+    font-size: 26pt;
     font-weight: bold;
     margin: 10px 0 6px;
   }
-  .condition-note { font-size: 8.5pt; font-style: italic; color: #444; margin: 4px 0 6px; }
-  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+  .condition-note { font-size: 10pt; font-style: italic; color: #444; margin: 4px 0 8px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
   th {
     background: #4472c4;
     color: #fff;
     font-weight: bold;
-    font-size: 8.5pt;
-    padding: 6px 8px;
+    font-size: 11pt;
+    padding: 8px 10px;
     text-align: center;
     border: none;
   }
   td {
-    font-size: 8pt;
-    padding: 5px 8px;
+    font-size: 10pt;
+    padding: 7px 10px;
     text-align: center;
     border: none;
     border-bottom: 1px solid #c5d3e8;
@@ -36,13 +36,13 @@
   tr:nth-child(even) td { background: #fff; }
   .eve-sig {
     display: flex;
-    margin-top: 24px;
+    margin-top: 28px;
     gap: 2rem;
   }
   .eve-sig-col { flex: 1; text-align: center; }
-  .eve-sig-role { font-weight: bold; font-size: 9.5pt; margin-bottom: 18px; }
-  .eve-sig-name { font-size: 9pt; min-height: 24px; margin-bottom: 8px; }
-  .eve-sig-line { font-size: 8pt; color: #888; font-style: italic; }
+  .eve-sig-role { font-weight: bold; font-size: 12pt; margin-bottom: 20px; }
+  .eve-sig-name { font-size: 11pt; min-height: 28px; margin-bottom: 10px; }
+  .eve-sig-line { font-size: 10pt; color: #888; font-style: italic; }
 {% endblock %}
 {% block content %}
 <div class="eve-header">
@@ -52,6 +52,7 @@
 
 <div class="eve-title">{{ labels.doc_return_title }}</div>
 
+<div class="body-center">
 <p class="condition-note">{{ labels.doc_condition_note }}</p>
 
 <table>
@@ -93,5 +94,6 @@
     <div class="eve-sig-name"></div>
     <div class="eve-sig-line">{{ labels.doc_date }}: _______________ &nbsp;&nbsp; {{ labels.doc_signature }}: _______________</div>
   </div>
+</div>
 </div>
 {% endblock %}

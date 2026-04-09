@@ -25,7 +25,7 @@ EN_LABELS = Labels(
     no_returned_assets="No recently checked-in assets found for this user.",
     select_all="Select all",
     # Document — shared
-    doc_condition_note="The assets listed below have been inspected and are in working condition.",
+    doc_condition_note="The assets listed below have been delivered in working condition.",
     # Document — checkout
     doc_checkout_title="Asset Delivery Receipt",
     doc_issued_by="Issued By",
