@@ -1,7 +1,5 @@
 # Snipe Sign
 
-> https://github.com/ValienteTechnologies/snipe-sign
-
 Generate printable PDF checkout and return forms for [Snipe-IT](https://snipeitapp.com/) assets, ready for physical signature.
 
 ## Features
