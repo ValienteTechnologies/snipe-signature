@@ -4,13 +4,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ labels.page_title }}</title>
-  <link rel="stylesheet" href="{{ root_path }}/static/style.css">
+  <link rel="stylesheet" href="{{ request.root_path }}/static/style.css">
 </head>
 <body>
 
 <nav class="drawer">
   <div class="drawer-header">
-    <a href="{{ root_path }}/" class="drawer-title">{{ labels.page_title }}</a>
+    <a href="{{ request.root_path }}/" class="drawer-title">{{ labels.page_title }}</a>
   </div>
   <div class="drawer-body">
     <div class="drawer-section">
@@ -37,7 +37,7 @@
   </div>
 </main>
 
-<script>const ROOT_PATH = "{{ root_path }}";</script>
-<script src="{{ root_path }}/static/drawer.js"></script>
+<script>const ROOT_PATH = "{{ request.root_path }}";</script>
+<script src="{{ request.root_path }}/static/drawer.js"></script>
 </body>
 </html>
