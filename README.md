@@ -51,5 +51,6 @@ All configuration is via environment variables (or a `.env` file):
 | `CF_ACCESS_CLIENT_SECRET` | No | — | Cloudflare Access client secret |
 | `APP_LANG` | No | `en` | UI and document language (`en` or `tr`) |
 | `APP_PORT` | No | `8000` | Port to listen on |
+| `APP_ROOT_PATH` | No | `` | Subpath when served behind a reverse proxy (e.g. `/zimmet`) |
 | `LOGO_PATH` | No | — | Absolute path to a logo image for documents |
 | `DOC_FOOTER_TEXT` | No | — | Footer text printed on every generated document |

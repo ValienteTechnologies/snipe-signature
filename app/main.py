@@ -36,11 +36,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 def create_app() -> FastAPI:
     get_settings()
 
+    settings = get_settings()
     app = FastAPI(
         title="Snipe-IT Signature",
         description="Physical signature form generator for Snipe-IT assets.",
         version="0.1.0",
         lifespan=lifespan,
+        root_path=settings.app_root_path,
     )
 
     # Static files
