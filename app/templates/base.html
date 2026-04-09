@@ -8,11 +8,7 @@
 </head>
 <body>
 
-<button class="drawer-toggle" onclick="toggleDrawer()" aria-label="Menu">&#9776;</button>
-
-<div class="drawer-backdrop" id="backdrop" onclick="closeDrawer()"></div>
-
-<nav class="drawer" id="drawer">
+<nav class="drawer">
   <div class="drawer-header">
     <a href="/" class="drawer-title">{{ labels.page_title }}</a>
   </div>
@@ -35,54 +31,12 @@
   </div>
 </nav>
 
-<main class="container">
-  {% block content %}{% endblock %}
+<main class="main-content">
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
 </main>
 
-<script>
-const _defaultTemplate = {{ ('"' ~ doc_templates[0][0] ~ '"') if doc_templates else '"uwagi"' }};
-
-function getCookie(name) {
-  const m = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-  return m ? m.pop() : null;
-}
-function setCookie(name, val) {
-  document.cookie = name + '=' + val + ';path=/;max-age=31536000;SameSite=Lax';
-}
-
-function toggleDrawer() {
-  document.getElementById('drawer').classList.toggle('open');
-  document.getElementById('backdrop').classList.toggle('open');
-}
-function closeDrawer() {
-  document.getElementById('drawer').classList.remove('open');
-  document.getElementById('backdrop').classList.remove('open');
-}
-
-function setLang(lang) {
-  setCookie('lang', lang);
-  location.reload();
-}
-function setTemplate(tmpl) {
-  localStorage.setItem('doc-template', tmpl);
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  const lang = getCookie('lang') || 'en';
-  const langSel = document.getElementById('lang-select');
-  if (langSel) langSel.value = lang;
-
-  const stored = localStorage.getItem('doc-template');
-  const tmplSel = document.getElementById('tmpl-select');
-  if (tmplSel) {
-    if (stored && tmplSel.querySelector('option[value="' + stored + '"]')) {
-      tmplSel.value = stored;
-    }
-    localStorage.setItem('doc-template', tmplSel.value);
-  } else if (!stored) {
-    localStorage.setItem('doc-template', _defaultTemplate);
-  }
-});
-</script>
+<script src="/static/drawer.js"></script>
 </body>
 </html>
