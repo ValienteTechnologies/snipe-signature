@@ -32,7 +32,7 @@ TR_LABELS = Labels(
     doc_received_by="Teslim Alan",
     doc_date="Tarih",
     doc_signature="İmza",
-    doc_name_surname="Ad / Soyad",
+    doc_name_surname="İsim",
     # Document — return
     doc_return_title="İade Tutanağı",
     doc_returned_by="İade Eden",
