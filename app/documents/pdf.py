@@ -12,7 +12,7 @@ from app.documents.registry import checkout_pdf_template, return_pdf_template
 from app.i18n import Labels
 from app.snipeit.models import AssetWithActivity, User
 
-_TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
+_TEMPLATES_DIR = Path(__file__).parent.parent / "templates" / "documents"
 _jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(str(_TEMPLATES_DIR)),
     autoescape=jinja2.select_autoescape(["html"]),

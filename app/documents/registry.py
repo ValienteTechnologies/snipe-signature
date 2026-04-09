@@ -24,14 +24,12 @@ def available_templates() -> list[tuple[str, str]]:
 
 
 def checkout_pdf_template(template: str) -> str:
-    """Return the Jinja2 HTML template filename for checkout PDF."""
-    if template == "uwagi" or template not in TEMPLATES:
-        return "doc_checkout.html"
-    return f"doc_checkout_{template}.html"
+    """Return the Jinja2 template path for checkout PDF (relative to documents/ loader root)."""
+    name = template if template in TEMPLATES else DEFAULT_TEMPLATE
+    return f"{name}/checkout.html"
 
 
 def return_pdf_template(template: str) -> str:
-    """Return the Jinja2 HTML template filename for return PDF."""
-    if template == "uwagi" or template not in TEMPLATES:
-        return "doc_return.html"
-    return f"doc_return_{template}.html"
+    """Return the Jinja2 template path for return PDF (relative to documents/ loader root)."""
+    name = template if template in TEMPLATES else DEFAULT_TEMPLATE
+    return f"{name}/return.html"

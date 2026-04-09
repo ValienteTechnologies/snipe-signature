@@ -1,9 +1,14 @@
-{% extends "doc_base.html" %}
+{% extends "_base.html" %}
+{% block extra_styles %}
+  th { background: #f0f0f0; color: #1a1a1a; }
+  .sig-table th { background: #f0f0f0; color: #1a1a1a; }
+  tr:nth-child(even) td { background: #fff; }
+{% endblock %}
 {% block content %}
 <div class="header">
   {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
   <div class="header-text">
-    <h1>{{ labels.doc_checkout_title }}</h1>
+    <h1>{{ labels.doc_return_title }}</h1>
     <div class="subtitle">{{ user.display_name }} &mdash; {{ generated_at }}</div>
   </div>
 </div>
@@ -19,7 +24,7 @@
       <th>{{ labels.col_model }}</th>
       <th>{{ labels.col_category }}</th>
       <th>{{ labels.col_serial }}</th>
-      <th>{{ labels.col_checkout_date }}</th>
+      <th>{{ labels.col_return_date }}</th>
     </tr>
   </thead>
   <tbody>
@@ -32,13 +37,7 @@
       <td>{{ asset.model_name }}</td>
       <td>{{ asset.category_name }}</td>
       <td>{{ asset.serial_display }}</td>
-      <td>
-        {% if item.activity_date %}
-          {{ item.activity_date.strftime("%Y-%m-%d") }}
-        {% elif asset.last_checkout %}
-          {{ asset.last_checkout.strftime("%Y-%m-%d") }}
-        {% else %}-{% endif %}
-      </td>
+      <td>{{ today }}</td>
     </tr>
     {% endfor %}
   </tbody>
@@ -50,8 +49,8 @@
 <table class="sig-table">
   <thead>
     <tr>
-      <th>{{ labels.doc_issued_by }}</th>
-      <th>{{ labels.doc_received_by }}</th>
+      <th>{{ labels.doc_returned_by }}</th>
+      <th>{{ labels.doc_received_by_admin }}</th>
     </tr>
   </thead>
   <tbody>
@@ -60,8 +59,8 @@
       <td>{{ labels.doc_name_surname }}</td>
     </tr>
     <tr>
-      <td>{{ admin_display }}</td>
       <td>{{ user.display_name }}</td>
+      <td>{{ admin_display }}</td>
     </tr>
     <tr class="sig-line-row">
       <td>{{ labels.doc_date }}: _______________ &nbsp;&nbsp; {{ labels.doc_signature }}: _______________</td>
