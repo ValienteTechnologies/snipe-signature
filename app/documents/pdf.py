@@ -33,6 +33,7 @@ def build_checkout_pdf(
     labels: Labels,
     logo_path: Path | None = None,
     template: str = "default",
+    footer_text: str = "",
 ) -> Path:
     from datetime import datetime
 
@@ -47,6 +48,7 @@ def build_checkout_pdf(
             "enriched": enriched,
             "logo_uri": logo_uri,
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
+            "footer_text": footer_text,
         },
     )
 
@@ -57,6 +59,7 @@ def build_return_pdf(
     labels: Labels,
     logo_path: Path | None = None,
     template: str = "default",
+    footer_text: str = "",
 ) -> Path:
     from datetime import datetime
 
@@ -73,5 +76,6 @@ def build_return_pdf(
             "logo_uri": logo_uri,
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "today": today_str,
+            "footer_text": footer_text,
         },
     )

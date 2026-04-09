@@ -29,6 +29,7 @@ def build_checkout_docx(
     labels: Labels,
     logo_path: Path | None = None,
     template: str = "default",
+    footer_text: str = "",
 ) -> Path:
     """Generate a checkout receipt DOCX and return the path to the temp file."""
     doc = Document()
@@ -118,6 +119,15 @@ def build_checkout_docx(
             set_cell_bg(cell, "3d5a80")
             if cell.paragraphs[0].runs:
                 cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
+
+    if footer_text:
+        section = doc.sections[0]
+        section.footer_distance = Pt(8)
+        footer_para = section.footer.paragraphs[0]
+        footer_para.text = footer_text
+        footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        footer_para.runs[0].font.size = Pt(7)
+        footer_para.runs[0].font.color.rgb = RGBColor(0x88, 0x88, 0x88)
 
     tmp = make_temp_file(".docx")
     doc.save(str(tmp))

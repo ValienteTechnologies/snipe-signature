@@ -6,6 +6,13 @@
   @page {
     size: A4 landscape;
     margin: 1.5cm 1.5cm 2cm 1.5cm;
+    {% if footer_text %}
+    @bottom-center {
+      content: "{{ footer_text }}";
+      font-size: 7pt;
+      color: #888;
+    }
+    {% endif %}
   }
   body {
     font-family: "DejaVu Sans", Arial, sans-serif;

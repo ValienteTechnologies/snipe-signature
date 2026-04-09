@@ -23,6 +23,8 @@ class Settings(BaseSettings):
 
     # Branding — path to a logo image used in generated documents
     logo_path: Path | None = None
+    # Footer text printed at the bottom of every generated document (PDF and DOCX)
+    doc_footer_text: str = ""
 
     @field_validator("logo_path", mode="before")
     @classmethod

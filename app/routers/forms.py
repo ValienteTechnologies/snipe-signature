@@ -116,19 +116,20 @@ async def checkout_form(
 ) -> Response:
     enriched, user = await _fetch_enriched(snipeit, body)
     logo = settings.logo_path
+    footer = settings.doc_footer_text
     safe_name = (user.username or str(user.id)).replace(" ", "_")
 
     if fmt == "docx":
-        path = build_checkout_docx(enriched, user, labels, logo, template)
+        path = build_checkout_docx(enriched, user, labels, logo, template, footer)
         return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"checkout_{safe_name}.docx", background)
 
     if fmt == "pdf":
-        path = build_checkout_pdf(enriched, user, labels, logo, template)
+        path = build_checkout_pdf(enriched, user, labels, logo, template, footer)
         return _single_response(path, "application/pdf", f"checkout_{safe_name}.pdf", background)
 
     # both
-    docx_path = build_checkout_docx(enriched, user, labels, logo, template)
-    pdf_path = build_checkout_pdf(enriched, user, labels, logo, template)
+    docx_path = build_checkout_docx(enriched, user, labels, logo, template, footer)
+    pdf_path = build_checkout_pdf(enriched, user, labels, logo, template, footer)
     return _zip_response(
         {f"checkout_{safe_name}.docx": docx_path, f"checkout_{safe_name}.pdf": pdf_path},
         f"checkout_{safe_name}.zip",
@@ -148,18 +149,19 @@ async def return_form(
 ) -> Response:
     enriched, user = await _fetch_enriched(snipeit, body)
     logo = settings.logo_path
+    footer = settings.doc_footer_text
     safe_name = (user.username or str(user.id)).replace(" ", "_")
 
     if fmt == "docx":
-        path = build_return_docx(enriched, user, labels, logo, template)
+        path = build_return_docx(enriched, user, labels, logo, template, footer)
         return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"return_{safe_name}.docx", background)
 
     if fmt == "pdf":
-        path = build_return_pdf(enriched, user, labels, logo, template)
+        path = build_return_pdf(enriched, user, labels, logo, template, footer)
         return _single_response(path, "application/pdf", f"return_{safe_name}.pdf", background)
 
-    docx_path = build_return_docx(enriched, user, labels, logo, template)
-    pdf_path = build_return_pdf(enriched, user, labels, logo, template)
+    docx_path = build_return_docx(enriched, user, labels, logo, template, footer)
+    pdf_path = build_return_pdf(enriched, user, labels, logo, template, footer)
     return _zip_response(
         {f"return_{safe_name}.docx": docx_path, f"return_{safe_name}.pdf": pdf_path},
         f"return_{safe_name}.zip",
