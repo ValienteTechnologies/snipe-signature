@@ -41,7 +41,7 @@ def set_landscape(doc: Document) -> None:
     section.page_width, section.page_height = section.page_height, section.page_width
 
 
-def add_logo(doc: Document, logo_path: Path, width_inches: float = 1.5) -> None:
+def add_logo(doc: Document, logo_path: Path, width_inches: float = 2.2) -> None:
     para = doc.paragraphs[0] if doc.paragraphs else doc.add_paragraph()
     para.alignment = WD_ALIGN_PARAGRAPH.LEFT
     run = para.add_run()
