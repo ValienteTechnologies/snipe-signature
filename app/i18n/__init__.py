@@ -26,7 +26,6 @@ class Labels:
     col_model: str
     col_category: str
     col_serial: str
-    col_assigned_to: str
     col_checkout_date: str
     col_return_date: str
     error_not_found: str
@@ -34,8 +33,6 @@ class Labels:
     no_assets: str
     no_returned_assets: str
     select_all: str
-    deselect_all: str
-    format_label: str
 
     # Document — shared
     doc_condition_note: str

@@ -16,8 +16,11 @@ def get_snipeit_client(request: Request) -> SnipeITClient:
     return request.app.state.snipeit
 
 
-def get_labels_dep(settings: Annotated[Settings, Depends(get_settings)]) -> Labels:
-    return get_labels(settings.app_lang)
+def get_labels_dep(request: Request, settings: Annotated[Settings, Depends(get_settings)]) -> Labels:
+    lang = request.cookies.get("lang", settings.app_lang)
+    if lang not in ("en", "tr"):
+        lang = settings.app_lang
+    return get_labels(lang)
 
 
 SnipeITDep = Annotated[SnipeITClient, Depends(get_snipeit_client)]

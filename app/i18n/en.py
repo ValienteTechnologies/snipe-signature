@@ -17,7 +17,6 @@ EN_LABELS = Labels(
     col_model="Model",
     col_category="Category",
     col_serial="Serial No.",
-    col_assigned_to="Assigned To",
     col_checkout_date="Checkout Date",
     col_return_date="Return Date",
     error_not_found="Not found. Please check the asset tag or username.",
@@ -25,8 +24,6 @@ EN_LABELS = Labels(
     no_assets="This user has no checked-out assets.",
     no_returned_assets="No recently checked-in assets found for this user.",
     select_all="Select all",
-    deselect_all="Deselect all",
-    format_label="Download format",
     # Document — shared
     doc_condition_note="The assets listed below have been inspected and are in working condition.",
     # Document — checkout

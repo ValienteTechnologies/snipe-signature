@@ -67,21 +67,7 @@
     {% endif %}
   </div>
 
-  {% if doc_templates | length > 1 %}
-  <div class="template-selector" style="margin-top: 1rem; display: flex; align-items: center; gap: 0.5rem;">
-    <label for="doc-template-select" style="font-size: 0.85rem; color: #555;">Template:</label>
-    <select id="doc-template-select" class="input" style="width: auto; padding: 4px 8px; font-size: 0.85rem;">
-      {% for tid, tlabel in doc_templates %}
-      <option value="{{ tid }}">{{ tlabel }}</option>
-      {% endfor %}
-    </select>
-  </div>
-  {% else %}
-  <input type="hidden" id="doc-template-select" value="{{ doc_templates[0][0] if doc_templates else 'default' }}">
-  {% endif %}
-
   {% if return_enriched is not none %}
-  {# User lookup — checkout / return tabs #}
   <div class="tabs" style="margin-top: 1rem;">
     <button class="tab-btn active" onclick="switchFormTab('checkout', this)">
       {{ labels.btn_checkout_form }}
@@ -116,7 +102,6 @@
   </div>
 
   {% else %}
-  {# Asset tag lookup — checkout only, no tabs #}
   {% if checkout_enriched %}
     {{ asset_table(checkout_enriched, "checkout", labels) }}
     <div class="actions">
@@ -155,7 +140,7 @@ function submitForm(type, fmt) {
   const body = { asset_ids: ids };
   if (userId !== null) body.user_id = userId;
 
-  const tmpl = document.getElementById('doc-template-select').value;
+  const tmpl = localStorage.getItem('doc-template') || _defaultTemplate;
   fetch('/forms/' + type + '?fmt=' + fmt + '&template=' + encodeURIComponent(tmpl), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

@@ -18,6 +18,7 @@ _TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
+templates.env.globals["doc_templates"] = available_templates()
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -56,12 +57,11 @@ async def asset_preview(
         {
             "labels": labels,
             "checkout_enriched": enriched,
-            "return_enriched": None,  # asset tag lookup has no return tab
+            "return_enriched": None,
             "user": user,
             "lookup_type": "asset",
             "lookup_value": tag,
             "error": error,
-            "doc_templates": available_templates(),
         },
     )
 
@@ -104,6 +104,5 @@ async def user_preview(
             "lookup_type": "user",
             "lookup_value": username,
             "error": error,
-            "doc_templates": available_templates(),
         },
     )

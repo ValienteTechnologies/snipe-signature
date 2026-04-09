@@ -17,7 +17,6 @@ TR_LABELS = Labels(
     col_model="Model",
     col_category="Kategori",
     col_serial="Seri No",
-    col_assigned_to="Zimmetli",
     col_checkout_date="Zimmet Tarihi",
     col_return_date="İade Tarihi",
     error_not_found="Bulunamadı. Lütfen etiketi veya kullanıcı adını kontrol edin.",
@@ -25,8 +24,6 @@ TR_LABELS = Labels(
     no_assets="Bu kullanıcıya zimmetli demirbaş bulunmamaktadır.",
     no_returned_assets="Bu kullanıcı için son iade edilmiş demirbaş bulunamadı.",
     select_all="Tümünü seç",
-    deselect_all="Seçimi kaldır",
-    format_label="İndirme formatı",
     # Document — shared
     doc_condition_note="Aşağıda listelenen demirbaşlar kontrol edilmiş olup çalışır durumdadır.",
     # Document — checkout
