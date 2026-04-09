@@ -1,4 +1,27 @@
 {% extends "_base.html" %}
+{% block extra_styles %}
+  .header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    border-bottom: 2px solid #333;
+    padding-bottom: 6px;
+  }
+  .header img { max-height: 72px; margin-right: 16px; }
+  .header-text { flex: 1; }
+  .header-text h1 { margin: 0; font-size: 14pt; font-weight: bold; }
+  .header-text .subtitle { font-size: 8pt; color: #555; }
+  .condition-note { font-size: 8.5pt; font-style: italic; color: #444; margin: 4px 0 6px; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; }
+  th { background: #3d5a80; color: #fff; padding: 5px 4px; text-align: center; font-size: 8.5pt; }
+  td { border: 1px solid #bbb; padding: 4px; text-align: center; font-size: 8pt; }
+  tr:nth-child(even) td { background: #f5f7fa; }
+  .sig-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  .sig-table th { background: #3d5a80; color: #fff; padding: 6px; text-align: center; font-size: 9pt; }
+  .sig-table td { border: 1px solid #bbb; padding: 6px; text-align: center; height: 28px; }
+  .sig-name-row td { font-weight: bold; }
+  .sig-line-row td { color: #888; font-style: italic; font-size: 8pt; }
+{% endblock %}
 {% block content %}
 <div class="header">
   {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
