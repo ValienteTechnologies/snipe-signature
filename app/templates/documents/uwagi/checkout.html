@@ -14,12 +14,12 @@
   <thead>
     <tr>
       <th>{{ labels.col_asset_tag }}</th>
-      <th>{{ labels.col_name }}</th>
       <th>{{ labels.col_manufacturer }}</th>
       <th>{{ labels.col_model }}</th>
       <th>{{ labels.col_category }}</th>
       <th>{{ labels.col_serial }}</th>
       <th>{{ labels.col_checkout_date }}</th>
+      <th>{{ labels.doc_issued_by }}</th>
     </tr>
   </thead>
   <tbody>
@@ -27,7 +27,6 @@
     {% set asset = item.asset %}
     <tr>
       <td>{{ asset.asset_tag }}</td>
-      <td>{{ asset.name or "-" }}</td>
       <td>{{ asset.manufacturer_name }}</td>
       <td>{{ asset.model_name }}</td>
       <td>{{ asset.category_name }}</td>
@@ -39,13 +38,11 @@
           {{ asset.last_checkout.strftime("%Y-%m-%d") }}
         {% else %}-{% endif %}
       </td>
+      <td>{{ item.admin_name or "-" }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
-
-{% set admin_names = enriched | map(attribute='admin_name') | select | unique | list %}
-{% set admin_display = admin_names[0] if admin_names | length == 1 else "" %}
 
 <table class="sig-table">
   <thead>
@@ -60,7 +57,7 @@
       <td>{{ labels.doc_name_surname }}</td>
     </tr>
     <tr>
-      <td>{{ admin_display }}</td>
+      <td></td>
       <td>{{ user.display_name }}</td>
     </tr>
     <tr class="sig-line-row">

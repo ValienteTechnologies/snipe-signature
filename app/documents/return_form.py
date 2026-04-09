@@ -64,12 +64,12 @@ def build_return_docx(
     today_str = datetime.now().strftime("%Y-%m-%d")
     columns = [
         labels.col_asset_tag,
-        labels.col_name,
         labels.col_manufacturer,
         labels.col_model,
         labels.col_category,
         labels.col_serial,
         labels.col_return_date,
+        labels.doc_issued_by,
     ]
     tbl = doc.add_table(rows=1 + len(enriched), cols=len(columns))
     tbl.style = "Table Grid"
@@ -86,26 +86,23 @@ def build_return_docx(
         asset = item.asset
         values = [
             asset.asset_tag,
-            asset.name or "-",
             asset.manufacturer_name,
             asset.model_name,
             asset.category_name,
             asset.serial_display,
             today_str,
+            item.admin_name or "-",
         ]
         for col_idx, val in enumerate(values):
             style_body_cell(tbl.rows[row_idx].cells[col_idx], val)
 
     # Signature block — inverted vs checkout: user returns, admin receives
-    admin_names = list({item.admin_name for item in enriched if item.admin_name})
-    admin_display = admin_names[0] if len(admin_names) == 1 else ""
-
     add_signature_table(
         doc,
         left_label=labels.doc_returned_by,
         right_label=labels.doc_received_by_admin,
         left_name=user.display_name,
-        right_name=admin_display,
+        right_name="",
         date_label=labels.doc_date,
         sig_label=labels.doc_signature,
         name_label=labels.doc_name_surname,

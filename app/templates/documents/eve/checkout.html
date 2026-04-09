@@ -1,6 +1,5 @@
 {% extends "_base.html" %}
 {% block extra_styles %}
-  /* Header: logo left, date right */
   .eve-header {
     display: flex;
     justify-content: space-between;
@@ -9,62 +8,26 @@
   }
   .eve-header img { max-height: 48px; }
   .eve-date { font-size: 8.5pt; color: #555; }
-
-  /* Title */
   .eve-title {
     text-align: center;
     font-size: 20pt;
     font-weight: bold;
-    margin: 10px 0 2px;
+    margin: 10px 0 6px;
   }
-  .eve-subtitle {
-    text-align: center;
-    font-size: 9pt;
-    color: #555;
-    margin: 0 0 6px;
-  }
-
-  /* Asset table: Light Shading Accent 1 look */
   table { border: none; }
-  th {
-    background: #4472c4;
-    color: #fff;
-    border: none;
-    font-size: 8.5pt;
-  }
-  td {
-    border: none;
-    border-bottom: 1px solid #dce6f1;
-    font-size: 8pt;
-  }
+  th { background: #4472c4; color: #fff; border: none; font-size: 8.5pt; }
+  td { border: none; border-bottom: 1px solid #dce6f1; font-size: 8pt; }
   tr:nth-child(odd) td { background: #dce6f1; }
   tr:nth-child(even) td { background: #fff; }
-
-  /* Signature: borderless, centered, lots of space above */
   .eve-sig {
     display: flex;
     margin-top: 48px;
     gap: 2rem;
   }
-  .eve-sig-col {
-    flex: 1;
-    text-align: center;
-  }
-  .eve-sig-role {
-    font-weight: bold;
-    font-size: 9.5pt;
-    margin-bottom: 18px;
-  }
-  .eve-sig-name {
-    font-size: 9pt;
-    min-height: 24px;
-    margin-bottom: 8px;
-  }
-  .eve-sig-line {
-    font-size: 8pt;
-    color: #888;
-    font-style: italic;
-  }
+  .eve-sig-col { flex: 1; text-align: center; }
+  .eve-sig-role { font-weight: bold; font-size: 9.5pt; margin-bottom: 18px; }
+  .eve-sig-name { font-size: 9pt; min-height: 24px; margin-bottom: 8px; }
+  .eve-sig-line { font-size: 8pt; color: #888; font-style: italic; }
 {% endblock %}
 {% block content %}
 <div class="eve-header">
@@ -80,12 +43,12 @@
   <thead>
     <tr>
       <th>{{ labels.col_asset_tag }}</th>
-      <th>{{ labels.col_name }}</th>
       <th>{{ labels.col_manufacturer }}</th>
       <th>{{ labels.col_model }}</th>
       <th>{{ labels.col_category }}</th>
       <th>{{ labels.col_serial }}</th>
       <th>{{ labels.col_checkout_date }}</th>
+      <th>{{ labels.doc_issued_by }}</th>
     </tr>
   </thead>
   <tbody>
@@ -93,7 +56,6 @@
     {% set asset = item.asset %}
     <tr>
       <td>{{ asset.asset_tag }}</td>
-      <td>{{ asset.name or "-" }}</td>
       <td>{{ asset.manufacturer_name }}</td>
       <td>{{ asset.model_name }}</td>
       <td>{{ asset.category_name }}</td>
@@ -105,18 +67,16 @@
           {{ asset.last_checkout.strftime("%Y-%m-%d") }}
         {% else %}-{% endif %}
       </td>
+      <td>{{ item.admin_name or "-" }}</td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
-{% set admin_names = enriched | map(attribute='admin_name') | select | unique | list %}
-{% set admin_display = admin_names[0] if admin_names | length == 1 else "" %}
-
 <div class="eve-sig">
   <div class="eve-sig-col">
     <div class="eve-sig-role">{{ labels.doc_issued_by }}</div>
-    <div class="eve-sig-name">{{ admin_display }}</div>
+    <div class="eve-sig-name"></div>
     <div class="eve-sig-line">{{ labels.doc_date }}: _______________ &nbsp;&nbsp; {{ labels.doc_signature }}: _______________</div>
   </div>
   <div class="eve-sig-col">
