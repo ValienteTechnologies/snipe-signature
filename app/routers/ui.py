@@ -21,6 +21,14 @@ templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
 templates.env.globals["doc_templates"] = available_templates()
 
 
+def _setup_template_globals() -> None:
+    from app.config import get_settings
+    templates.env.globals["root_path"] = get_settings().app_root_path.rstrip("/")
+
+
+_setup_template_globals()
+
+
 @router.get("/", response_class=HTMLResponse)
 async def index(request: Request, labels: LabelsDep) -> HTMLResponse:
     return templates.TemplateResponse(request, "index.html", {"labels": labels})

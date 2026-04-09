@@ -9,12 +9,12 @@ function switchTab(name, btn) {
 
 function lookupAsset() {
   const tag = document.getElementById('tag-input').value.trim();
-  if (tag) window.location.href = '/assets/' + encodeURIComponent(tag) + '/preview';
+  if (tag) window.location.href = ROOT_PATH + '/assets/' + encodeURIComponent(tag) + '/preview';
 }
 
 function lookupUser() {
   const user = document.getElementById('user-input').value.trim();
-  if (user) window.location.href = '/users/' + encodeURIComponent(user) + '/preview';
+  if (user) window.location.href = ROOT_PATH + '/users/' + encodeURIComponent(user) + '/preview';
 }
 
 document.addEventListener('DOMContentLoaded', () => {
