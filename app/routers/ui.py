@@ -11,6 +11,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
+from app.documents.registry import available_templates
 from app.snipeit.client import AssetNotFound, UserNotFound
 
 _TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
@@ -60,6 +61,7 @@ async def asset_preview(
             "lookup_type": "asset",
             "lookup_value": tag,
             "error": error,
+            "doc_templates": available_templates(),
         },
     )
 
@@ -102,5 +104,6 @@ async def user_preview(
             "lookup_type": "user",
             "lookup_value": username,
             "error": error,
+            "doc_templates": available_templates(),
         },
     )

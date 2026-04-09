@@ -7,8 +7,9 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from docx.shared import Inches, Pt
+from docx.shared import Inches, Pt, RGBColor
 
 # Default placeholder logo shipped with the package
 _DEFAULT_LOGO = Path(__file__).parent.parent / "static" / "logo_placeholder.png"
@@ -45,6 +46,17 @@ def add_logo(doc: Document, logo_path: Path, width_inches: float = 1.5) -> None:
     para.alignment = WD_ALIGN_PARAGRAPH.LEFT
     run = para.add_run()
     run.add_picture(str(logo_path), width=Inches(width_inches))
+
+
+def set_cell_bg(cell, hex_color: str) -> None:
+    """Set the background fill colour of a table cell (hex without #)."""
+    tc = cell._tc
+    tcPr = tc.get_or_add_tcPr()
+    shd = OxmlElement("w:shd")
+    shd.set(qn("w:val"), "clear")
+    shd.set(qn("w:color"), "auto")
+    shd.set(qn("w:fill"), hex_color)
+    tcPr.append(shd)
 
 
 def style_header_cell(cell, text: str, font_size: int = 10) -> None:

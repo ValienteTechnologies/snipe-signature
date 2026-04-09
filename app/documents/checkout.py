@@ -7,13 +7,14 @@ from pathlib import Path
 
 from docx import Document
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.shared import Pt
+from docx.shared import Pt, RGBColor
 
 from app.documents.base import (
     add_logo,
     add_signature_table,
     make_temp_file,
     resolve_logo,
+    set_cell_bg,
     set_landscape,
     style_body_cell,
     style_header_cell,
@@ -27,6 +28,7 @@ def build_checkout_docx(
     user: User,
     labels: Labels,
     logo_path: Path | None = None,
+    template: str = "default",
 ) -> Path:
     """Generate a checkout receipt DOCX and return the path to the temp file."""
     doc = Document()
@@ -73,7 +75,12 @@ def build_checkout_docx(
 
     # Header row
     for col_idx, col_name in enumerate(columns):
-        style_header_cell(tbl.rows[0].cells[col_idx], col_name)
+        cell = tbl.rows[0].cells[col_idx]
+        style_header_cell(cell, col_name)
+        if template == "uwagi":
+            set_cell_bg(cell, "3d5a80")
+            run = cell.paragraphs[0].runs[0]
+            run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
 
     # Data rows
     for row_idx, item in enumerate(enriched, start=1):
@@ -109,6 +116,13 @@ def build_checkout_docx(
         sig_label=labels.doc_signature,
         name_label=labels.doc_name_surname,
     )
+
+    if template == "uwagi":
+        sig_tbl = doc.tables[-1]
+        for cell in sig_tbl.rows[0].cells:
+            set_cell_bg(cell, "3d5a80")
+            if cell.paragraphs[0].runs:
+                cell.paragraphs[0].runs[0].font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
 
     tmp = make_temp_file(".docx")
     doc.save(str(tmp))

@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
 from app.documents.checkout import build_checkout_docx
 from app.documents.pdf import build_checkout_pdf, build_return_pdf
+from app.documents.registry import DEFAULT_TEMPLATE, available_templates
 from app.documents.return_form import build_return_docx
 from app.snipeit.client import AssetNotFound, UserNotFound
 from app.snipeit.models import AssetWithActivity, User
@@ -22,6 +23,7 @@ from app.snipeit.models import AssetWithActivity, User
 router = APIRouter(prefix="/forms")
 
 FormatParam = Annotated[Literal["docx", "pdf", "both"], Query(description="Output format")]
+TemplateParam = Annotated[str, Query(description="Document template name")]
 
 
 class FormRequest(BaseModel):
@@ -106,6 +108,7 @@ async def _fetch_enriched(
 async def checkout_form(
     body: FormRequest,
     fmt: FormatParam = "both",
+    template: TemplateParam = DEFAULT_TEMPLATE,
     snipeit: SnipeITDep = ...,
     labels: LabelsDep = ...,
     settings: SettingsDep = ...,
@@ -116,16 +119,16 @@ async def checkout_form(
     safe_name = (user.username or str(user.id)).replace(" ", "_")
 
     if fmt == "docx":
-        path = build_checkout_docx(enriched, user, labels, logo)
+        path = build_checkout_docx(enriched, user, labels, logo, template)
         return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"checkout_{safe_name}.docx", background)
 
     if fmt == "pdf":
-        path = build_checkout_pdf(enriched, user, labels, logo)
+        path = build_checkout_pdf(enriched, user, labels, logo, template)
         return _single_response(path, "application/pdf", f"checkout_{safe_name}.pdf", background)
 
     # both
-    docx_path = build_checkout_docx(enriched, user, labels, logo)
-    pdf_path = build_checkout_pdf(enriched, user, labels, logo)
+    docx_path = build_checkout_docx(enriched, user, labels, logo, template)
+    pdf_path = build_checkout_pdf(enriched, user, labels, logo, template)
     return _zip_response(
         {f"checkout_{safe_name}.docx": docx_path, f"checkout_{safe_name}.pdf": pdf_path},
         f"checkout_{safe_name}.zip",
@@ -137,6 +140,7 @@ async def checkout_form(
 async def return_form(
     body: FormRequest,
     fmt: FormatParam = "both",
+    template: TemplateParam = DEFAULT_TEMPLATE,
     snipeit: SnipeITDep = ...,
     labels: LabelsDep = ...,
     settings: SettingsDep = ...,
@@ -147,15 +151,15 @@ async def return_form(
     safe_name = (user.username or str(user.id)).replace(" ", "_")
 
     if fmt == "docx":
-        path = build_return_docx(enriched, user, labels, logo)
+        path = build_return_docx(enriched, user, labels, logo, template)
         return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"return_{safe_name}.docx", background)
 
     if fmt == "pdf":
-        path = build_return_pdf(enriched, user, labels, logo)
+        path = build_return_pdf(enriched, user, labels, logo, template)
         return _single_response(path, "application/pdf", f"return_{safe_name}.pdf", background)
 
-    docx_path = build_return_docx(enriched, user, labels, logo)
-    pdf_path = build_return_pdf(enriched, user, labels, logo)
+    docx_path = build_return_docx(enriched, user, labels, logo, template)
+    pdf_path = build_return_pdf(enriched, user, labels, logo, template)
     return _zip_response(
         {f"return_{safe_name}.docx": docx_path, f"return_{safe_name}.pdf": pdf_path},
         f"return_{safe_name}.zip",

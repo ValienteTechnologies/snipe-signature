@@ -8,6 +8,7 @@ import jinja2
 from weasyprint import HTML
 
 from app.documents.base import make_temp_file, resolve_logo
+from app.documents.registry import checkout_pdf_template, return_pdf_template
 from app.i18n import Labels
 from app.snipeit.models import AssetWithActivity, User
 
@@ -31,6 +32,7 @@ def build_checkout_pdf(
     user: User,
     labels: Labels,
     logo_path: Path | None = None,
+    template: str = "default",
 ) -> Path:
     from datetime import datetime
 
@@ -38,7 +40,7 @@ def build_checkout_pdf(
     logo_uri = resolved_logo.resolve().as_uri() if resolved_logo else None
 
     return _render_pdf(
-        "doc_checkout.html",
+        checkout_pdf_template(template),
         {
             "labels": labels,
             "user": user,
@@ -54,6 +56,7 @@ def build_return_pdf(
     user: User,
     labels: Labels,
     logo_path: Path | None = None,
+    template: str = "default",
 ) -> Path:
     from datetime import datetime
 
@@ -62,7 +65,7 @@ def build_return_pdf(
     today_str = datetime.now().strftime("%Y-%m-%d")
 
     return _render_pdf(
-        "doc_return.html",
+        return_pdf_template(template),
         {
             "labels": labels,
             "user": user,
