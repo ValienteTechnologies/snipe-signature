@@ -2,7 +2,7 @@ from app.i18n import Labels
 
 TR_LABELS = Labels(
     # UI
-    page_title="Snipe-IT İmza Formları",
+    page_title="Snipe Sign",
     tab_asset="Demirbaş",
     tab_user="Kullanıcı",
     search_placeholder_tag="Demirbaş etiketi (ör. 00173)",
