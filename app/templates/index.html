@@ -1,5 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
+{% if request.root_path %}
+<div class="back-link"><a href="/">&#8592; Snipe-IT</a></div>
+{% endif %}
 <div class="card search-card">
   <div class="tabs">
     <button class="tab-btn active" onclick="switchTab('asset', this)">{{ labels.tab_asset }}</button>
