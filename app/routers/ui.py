@@ -5,9 +5,10 @@ from __future__ import annotations
 import asyncio
 import contextlib
 from pathlib import Path
+from typing import Annotated
 
-from fastapi import APIRouter, Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, Query, Request
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
@@ -29,6 +30,23 @@ async def index(request: Request, labels: LabelsDep, settings: SettingsDep) -> H
         "index.html",
         {"labels": labels, "rfid_enabled": settings.rfid_printer_url is not None},
     )
+
+
+@router.get("/users/search")
+async def user_search(
+    q: Annotated[str, Query(min_length=2)],
+    snipeit: SnipeITDep,
+) -> JSONResponse:
+    users = await snipeit.search_users(q)
+    return JSONResponse([
+        {
+            "id": u.id,
+            "username": u.username,
+            "display_name": u.display_name,
+            "department": u.department.name if u.department else None,
+        }
+        for u in users
+    ])
 
 
 @router.get("/assets/{tag}/preview", response_class=HTMLResponse)

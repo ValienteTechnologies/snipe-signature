@@ -68,12 +68,92 @@ function lookupUser() {
   if (user) window.location.href = ROOT_PATH + '/users/' + encodeURIComponent(user) + '/preview';
 }
 
+function navigateToUser(username) {
+  window.location.href = ROOT_PATH + '/users/' + encodeURIComponent(username) + '/preview';
+}
+
+(function initUserSearch() {
+  let debounceTimer = null;
+  let activeIndex = -1;
+
+  function showDropdown(users) {
+    const ul = document.getElementById('user-dropdown');
+    ul.innerHTML = '';
+    activeIndex = -1;
+    if (!users.length) { ul.classList.add('hidden'); return; }
+    users.forEach((u, i) => {
+      const li = document.createElement('li');
+      li.className = 'user-dropdown-item';
+      li.dataset.username = u.username || '';
+      li.innerHTML = `<span class="udd-name">${u.display_name}</span>`
+        + (u.username ? `<span class="udd-meta">${u.username}</span>` : '')
+        + (u.department ? `<span class="udd-meta">${u.department}</span>` : '');
+      li.addEventListener('mousedown', e => {
+        e.preventDefault();
+        navigateToUser(u.username || String(u.id));
+      });
+      ul.appendChild(li);
+    });
+    ul.classList.remove('hidden');
+  }
+
+  function hideDropdown() {
+    document.getElementById('user-dropdown').classList.add('hidden');
+    activeIndex = -1;
+  }
+
+  function setActive(items, index) {
+    items.forEach(el => el.classList.remove('active'));
+    if (index >= 0 && index < items.length) items[index].classList.add('active');
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('user-input');
+
+    input.addEventListener('input', () => {
+      clearTimeout(debounceTimer);
+      const q = input.value.trim();
+      if (q.length < 2) { hideDropdown(); return; }
+      debounceTimer = setTimeout(async () => {
+        try {
+          const resp = await fetch(ROOT_PATH + '/users/search?q=' + encodeURIComponent(q));
+          if (!resp.ok) { hideDropdown(); return; }
+          showDropdown(await resp.json());
+        } catch { hideDropdown(); }
+      }, 280);
+    });
+
+    input.addEventListener('keydown', e => {
+      const ul = document.getElementById('user-dropdown');
+      const items = [...ul.querySelectorAll('.user-dropdown-item')];
+      if (ul.classList.contains('hidden') || !items.length) {
+        if (e.key === 'Enter') lookupUser();
+        return;
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        activeIndex = Math.min(activeIndex + 1, items.length - 1);
+        setActive(items, activeIndex);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        activeIndex = Math.max(activeIndex - 1, -1);
+        setActive(items, activeIndex);
+      } else if (e.key === 'Enter') {
+        e.preventDefault();
+        if (activeIndex >= 0) navigateToUser(items[activeIndex].dataset.username);
+        else lookupUser();
+      } else if (e.key === 'Escape') {
+        hideDropdown();
+      }
+    });
+
+    input.addEventListener('blur', () => setTimeout(hideDropdown, 150));
+  });
+}());
+
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('tag-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') lookupAsset();
-  });
-  document.getElementById('user-input').addEventListener('keydown', e => {
-    if (e.key === 'Enter') lookupUser();
   });
   document.getElementById('tag-input').focus();
 });

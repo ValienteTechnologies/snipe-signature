@@ -86,6 +86,12 @@ class SnipeITClient:
     # Users
     # ------------------------------------------------------------------
 
+    async def search_users(self, query: str, limit: int = 10) -> list[User]:
+        resp = await self._client.get("/api/v1/users", params={"search": query, "limit": limit})
+        self._raise_for_status(resp)
+        rows = resp.json().get("rows") or []
+        return [User.model_validate(r) for r in rows]
+
     async def get_user_by_username(self, username: str) -> User:
         resp = await self._client.get("/api/v1/users", params={"username": username, "limit": 1})
         self._raise_for_status(resp)

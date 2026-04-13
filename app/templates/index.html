@@ -28,17 +28,20 @@
   </div>
 
   <div class="tab-panel hidden" id="panel-user">
-    <div class="input-group">
-      <input
-        type="text"
-        id="user-input"
-        placeholder="{{ labels.search_placeholder_user }}"
-        autocomplete="off"
-        class="input"
-      >
-      <button type="button" class="btn btn-primary" onclick="lookupUser()">
-        {{ labels.btn_lookup_user }}
-      </button>
+    <div class="user-search-wrap">
+      <div class="input-group">
+        <input
+          type="text"
+          id="user-input"
+          placeholder="{{ labels.search_placeholder_user }}"
+          autocomplete="off"
+          class="input"
+        >
+        <button type="button" class="btn btn-primary" onclick="lookupUser()">
+          {{ labels.btn_lookup_user }}
+        </button>
+      </div>
+      <ul id="user-dropdown" class="user-dropdown hidden"></ul>
     </div>
   </div>
 </div>
