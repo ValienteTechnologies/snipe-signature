@@ -47,8 +47,9 @@ function printRfid(tag) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ tag }),
   })
-  .then(resp => {
-    if (!resp.ok) return resp.json().then(d => { throw new Error(d.detail || 'Error'); });
-  })
+  .then(resp => resp.json().then(d => {
+    if (!resp.ok) throw new Error(d.detail || 'Error');
+    if (d.mesaj) alert(d.mesaj);
+  }))
   .catch(err => alert('RFID print error: ' + err.message));
 }

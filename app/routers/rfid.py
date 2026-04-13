@@ -16,7 +16,7 @@ class RfidPrintRequest(BaseModel):
 
 
 @router.post("/print")
-async def rfid_print(body: RfidPrintRequest, settings: SettingsDep) -> dict[str, bool]:
+async def rfid_print(body: RfidPrintRequest, settings: SettingsDep) -> dict:
     if settings.rfid_printer_url is None:
         raise HTTPException(status_code=503, detail="RFID printer not configured")
 
@@ -30,4 +30,7 @@ async def rfid_print(body: RfidPrintRequest, settings: SettingsDep) -> dict[str,
     except httpx.RequestError as exc:
         raise HTTPException(status_code=502, detail=f"Could not reach printer: {exc}") from exc
 
-    return {"ok": True}
+    try:
+        return resp.json()
+    except Exception:
+        return {"ok": True}

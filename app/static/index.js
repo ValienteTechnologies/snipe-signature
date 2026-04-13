@@ -38,19 +38,19 @@ async function printRfidRange(startTag, endTag) {
 
   for (let i = start; i <= end; i++) {
     const tag = String(i).padStart(padLen, '0');
-    status.textContent = `Printing ${i - start + 1} / ${total} (${tag})…`;
     try {
       const resp = await fetch(ROOT_PATH + '/rfid/print', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tag }),
       });
+      const d = await resp.json().catch(() => ({}));
       if (!resp.ok) {
-        const d = await resp.json().catch(() => ({}));
         status.textContent = `Error at ${tag}: ${d.detail || 'unknown error'}`;
         status.className = 'rfid-status rfid-error';
         return;
       }
+      status.textContent = d.mesaj || `Printing ${i - start + 1} / ${total} (${tag})…`;
     } catch (e) {
       status.textContent = `Error at ${tag}: ${e.message}`;
       status.className = 'rfid-status rfid-error';
