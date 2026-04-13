@@ -3,8 +3,6 @@
 from __future__ import annotations
 
 import contextlib
-import io
-import zipfile
 from pathlib import Path
 from typing import Annotated, Literal
 
@@ -22,7 +20,7 @@ from app.snipeit.models import AssetWithActivity, User
 
 router = APIRouter(prefix="/forms")
 
-FormatParam = Annotated[Literal["docx", "pdf", "both"], Query(description="Output format")]
+FormatParam = Annotated[Literal["docx", "pdf"], Query(description="Output format")]
 TemplateParam = Annotated[str, Query(description="Document template name")]
 
 
@@ -36,24 +34,6 @@ def _cleanup(*paths: Path) -> None:
         with contextlib.suppress(OSError):
             p.unlink(missing_ok=True)
 
-
-def _zip_response(
-    files: dict[str, Path],
-    zip_name: str,
-    background: BackgroundTasks,
-) -> StreamingResponse:
-    """Bundle one or more files into an in-memory ZIP and stream it."""
-    buf = io.BytesIO()
-    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
-        for arcname, path in files.items():
-            zf.write(path, arcname)
-    buf.seek(0)
-    background.add_task(_cleanup, *files.values())
-    return StreamingResponse(
-        buf,
-        media_type="application/zip",
-        headers={"Content-Disposition": f'attachment; filename="{zip_name}"'},
-    )
 
 
 def _single_response(
@@ -107,7 +87,7 @@ async def _fetch_enriched(
 @router.post("/checkout")
 async def checkout_form(
     body: FormRequest,
-    fmt: FormatParam = "both",
+    fmt: FormatParam = "pdf",
     template: TemplateParam = DEFAULT_TEMPLATE,
     snipeit: SnipeITDep = ...,
     labels: LabelsDep = ...,
@@ -123,24 +103,14 @@ async def checkout_form(
         path = build_checkout_docx(enriched, user, labels, logo, template, footer)
         return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"checkout_{safe_name}.docx", background)
 
-    if fmt == "pdf":
-        path = build_checkout_pdf(enriched, user, labels, logo, template, footer)
-        return _single_response(path, "application/pdf", f"checkout_{safe_name}.pdf", background)
-
-    # both
-    docx_path = build_checkout_docx(enriched, user, labels, logo, template, footer)
-    pdf_path = build_checkout_pdf(enriched, user, labels, logo, template, footer)
-    return _zip_response(
-        {f"checkout_{safe_name}.docx": docx_path, f"checkout_{safe_name}.pdf": pdf_path},
-        f"checkout_{safe_name}.zip",
-        background,
-    )
+    path = build_checkout_pdf(enriched, user, labels, logo, template, footer)
+    return _single_response(path, "application/pdf", f"checkout_{safe_name}.pdf", background)
 
 
 @router.post("/return")
 async def return_form(
     body: FormRequest,
-    fmt: FormatParam = "both",
+    fmt: FormatParam = "pdf",
     template: TemplateParam = DEFAULT_TEMPLATE,
     snipeit: SnipeITDep = ...,
     labels: LabelsDep = ...,
@@ -156,14 +126,5 @@ async def return_form(
         path = build_return_docx(enriched, user, labels, logo, template, footer)
         return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"return_{safe_name}.docx", background)
 
-    if fmt == "pdf":
-        path = build_return_pdf(enriched, user, labels, logo, template, footer)
-        return _single_response(path, "application/pdf", f"return_{safe_name}.pdf", background)
-
-    docx_path = build_return_docx(enriched, user, labels, logo, template, footer)
-    pdf_path = build_return_pdf(enriched, user, labels, logo, template, footer)
-    return _zip_response(
-        {f"return_{safe_name}.docx": docx_path, f"return_{safe_name}.pdf": pdf_path},
-        f"return_{safe_name}.zip",
-        background,
-    )
+    path = build_return_pdf(enriched, user, labels, logo, template, footer)
+    return _single_response(path, "application/pdf", f"return_{safe_name}.pdf", background)
