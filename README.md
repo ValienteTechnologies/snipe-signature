@@ -4,12 +4,13 @@ Generate printable PDF checkout and return forms for [Snipe-IT](https://snipeita
 
 ## Features
 
-- Look up assets or users from your Snipe-IT instance
-- Generate checkout and return forms as PDFs
+- Look up assets by tag, or search users by name/username/email with live autocomplete
+- Generate checkout and return forms as PDF (opens in browser for printing) or DOCX (download)
 - Two document templates: **Eve** and **Uwagi**
 - Turkish and English language support
 - Custom logo branding per deployment
 - Cloudflare Access support for protected Snipe-IT instances
+- RFID label printer integration — print a single tag from the asset table, or a range directly from the search box
 
 ## Requirements
 
@@ -53,3 +54,23 @@ All configuration is via environment variables (or a `.env` file):
 | `APP_PORT` | No | `8000` | Port to listen on |
 | `LOGO_PATH` | No | — | Absolute path to a logo image for documents |
 | `DOC_FOOTER_TEXT` | No | — | Footer text printed on every generated document |
+| `RFID_PRINTER_URL` | No | — | Internal RFID printer service URL (see below) |
+
+## RFID Printer
+
+When `RFID_PRINTER_URL` is set, the app exposes two ways to print RFID labels:
+
+**Single tag** — a printer icon button appears in each row of the asset table on the preview page. Click it to send that asset's tag to the printer.
+
+**Range** — on the home page, type a range into the asset search box (e.g. `00001-00010`) and press Enter. The app prints each tag in sequence and shows live progress. Tags must be zero-padded numeric; maximum 1000 tags per range.
+
+The app proxies print requests to the configured service:
+
+```
+POST {RFID_PRINTER_URL}
+Content-Type: application/json
+
+{"tag": "00001"}
+```
+
+The printer service's response is passed back to the UI and displayed to the user.
