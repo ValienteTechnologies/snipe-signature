@@ -26,7 +26,10 @@ class Settings(BaseSettings):
     # Footer text printed at the bottom of every generated document (PDF and DOCX)
     doc_footer_text: str = ""
 
-    @field_validator("logo_path", mode="before")
+    # RFID printer service URL (internal) — leave blank to disable the Print Tag button
+    rfid_printer_url: AnyHttpUrl | None = None
+
+    @field_validator("logo_path", "rfid_printer_url", mode="before")
     @classmethod
     def _empty_str_to_none(cls, v: object) -> object:
         if isinstance(v, str) and not v.strip():

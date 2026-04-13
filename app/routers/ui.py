@@ -63,6 +63,7 @@ async def asset_preview(
             "lookup_type": "asset",
             "lookup_value": tag,
             "error": error,
+            "rfid_enabled": settings.rfid_printer_url is not None,
         },
     )
 
@@ -105,5 +106,6 @@ async def user_preview(
             "lookup_type": "user",
             "lookup_value": username,
             "error": error,
+            "rfid_enabled": settings.rfid_printer_url is not None,
         },
     )

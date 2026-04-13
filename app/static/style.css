@@ -137,6 +137,8 @@ body {
 .btn-pdf:hover { background: #a93226; }
 .btn-docx { background: #2563eb; color: #fff; }
 .btn-docx:hover { background: #1d4ed8; }
+.btn-rfid { background: #6b7280; color: #fff; border: none; border-radius: 4px; padding: .25rem .35rem; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; }
+.btn-rfid:hover { background: #4b5563; }
 
 /* ── Alerts ── */
 .alert {

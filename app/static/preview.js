@@ -40,3 +40,15 @@ function submitForm(type, fmt) {
   })
   .catch(err => alert('Error: ' + err.message));
 }
+
+function printRfid(tag) {
+  fetch(ROOT_PATH + '/rfid/print', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tag }),
+  })
+  .then(resp => {
+    if (!resp.ok) return resp.json().then(d => { throw new Error(d.detail || 'Error'); });
+  })
+  .catch(err => alert('RFID print error: ' + err.message));
+}

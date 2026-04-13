@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from app.config import get_settings
 
 _APP_DIR = Path(__file__).parent
-from app.routers import forms, ui
+from app.routers import forms, rfid, ui
 from app.snipeit.client import AssetNotFound, SnipeITClient, SnipeITError, UserNotFound
 
 
@@ -49,6 +49,7 @@ def create_app() -> FastAPI:
     # Routers
     app.include_router(ui.router)
     app.include_router(forms.router, tags=["forms"])
+    app.include_router(rfid.router, tags=["rfid"])
 
     # Exception handlers
     @app.exception_handler(AssetNotFound)
