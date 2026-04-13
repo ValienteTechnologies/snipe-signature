@@ -14,7 +14,7 @@
       <input
         type="text"
         id="tag-input"
-        placeholder="{{ labels.search_placeholder_tag }}"
+        placeholder="{{ labels.search_placeholder_tag }}{% if rfid_enabled %} / {{ labels.search_placeholder_tag_rfid_hint }}{% endif %}"
         autocomplete="off"
         class="input"
       >
@@ -22,6 +22,9 @@
         {{ labels.btn_lookup_asset }}
       </button>
     </div>
+    {% if rfid_enabled %}
+    <div id="rfid-status" class="rfid-status hidden"></div>
+    {% endif %}
   </div>
 
   <div class="tab-panel hidden" id="panel-user">
@@ -40,5 +43,6 @@
   </div>
 </div>
 
+<script>const RFID_ENABLED = {{ 'true' if rfid_enabled else 'false' }};</script>
 <script src="{{ request.root_path }}/static/index.js"></script>
 {% endblock %}

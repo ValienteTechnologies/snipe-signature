@@ -6,6 +6,7 @@ TR_LABELS = Labels(
     tab_asset="Demirbaş",
     tab_user="Kullanıcı",
     search_placeholder_tag="Demirbaş etiketi (ör. 00173)",
+    search_placeholder_tag_rfid_hint="veya RFID aralığı (ör. 00001-00010)",
     search_placeholder_user="Kullanıcı adı (ör. a.yilmaz)",
     btn_lookup_asset="Demirbaşı Ara",
     btn_lookup_user="Kullanıcıyı Ara",

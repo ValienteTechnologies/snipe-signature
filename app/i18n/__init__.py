@@ -15,6 +15,7 @@ class Labels:
     tab_asset: str
     tab_user: str
     search_placeholder_tag: str
+    search_placeholder_tag_rfid_hint: str
     search_placeholder_user: str
     btn_lookup_asset: str
     btn_lookup_user: str

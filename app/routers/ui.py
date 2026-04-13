@@ -23,8 +23,12 @@ templates.env.globals["doc_templates"] = available_templates()
 
 
 @router.get("/", response_class=HTMLResponse)
-async def index(request: Request, labels: LabelsDep) -> HTMLResponse:
-    return templates.TemplateResponse(request, "index.html", {"labels": labels})
+async def index(request: Request, labels: LabelsDep, settings: SettingsDep) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request,
+        "index.html",
+        {"labels": labels, "rfid_enabled": settings.rfid_printer_url is not None},
+    )
 
 
 @router.get("/assets/{tag}/preview", response_class=HTMLResponse)

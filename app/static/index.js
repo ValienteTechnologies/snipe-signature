@@ -8,8 +8,59 @@ function switchTab(name, btn) {
 }
 
 function lookupAsset() {
-  const tag = document.getElementById('tag-input').value.trim();
-  if (tag) window.location.href = ROOT_PATH + '/assets/' + encodeURIComponent(tag) + '/preview';
+  const val = document.getElementById('tag-input').value.trim();
+  if (!val) return;
+
+  if (RFID_ENABLED) {
+    const m = val.match(/^(\d+)-(\d+)$/);
+    if (m) { printRfidRange(m[1], m[2]); return; }
+  }
+
+  window.location.href = ROOT_PATH + '/assets/' + encodeURIComponent(val) + '/preview';
+}
+
+async function printRfidRange(startTag, endTag) {
+  const padLen = Math.max(startTag.length, endTag.length);
+  const start = parseInt(startTag, 10);
+  const end = parseInt(endTag, 10);
+  const total = end - start + 1;
+
+  const status = document.getElementById('rfid-status');
+
+  if (end < start || total > 1000) {
+    status.textContent = 'Invalid range (max 1000 tags).';
+    status.className = 'rfid-status rfid-error';
+    return;
+  }
+
+  status.textContent = 'Starting...';
+  status.className = 'rfid-status rfid-progress';
+
+  for (let i = start; i <= end; i++) {
+    const tag = String(i).padStart(padLen, '0');
+    status.textContent = `Printing ${i - start + 1} / ${total} (${tag})…`;
+    try {
+      const resp = await fetch(ROOT_PATH + '/rfid/print', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tag }),
+      });
+      if (!resp.ok) {
+        const d = await resp.json().catch(() => ({}));
+        status.textContent = `Error at ${tag}: ${d.detail || 'unknown error'}`;
+        status.className = 'rfid-status rfid-error';
+        return;
+      }
+    } catch (e) {
+      status.textContent = `Error at ${tag}: ${e.message}`;
+      status.className = 'rfid-status rfid-error';
+      return;
+    }
+    if (i < end) await new Promise(r => setTimeout(r, 100));
+  }
+
+  status.textContent = `Done! Printed ${total} tag(s).`;
+  status.className = 'rfid-status rfid-done';
 }
 
 function lookupUser() {
