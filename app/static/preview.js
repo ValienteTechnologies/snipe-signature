@@ -29,13 +29,18 @@ function submitForm(type, fmt) {
   .then(resp => {
     if (!resp.ok) return resp.json().then(d => { throw new Error(d.detail || 'Error'); });
     return resp.blob().then(blob => {
-      const cd = resp.headers.get('Content-Disposition') || '';
-      const match = cd.match(/filename="(.+?)"/);
-      const filename = match ? match[1] : type + '_form';
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = filename; a.click();
-      URL.revokeObjectURL(url);
+      if (fmt === 'pdf') {
+        window.open(url, '_blank');
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+      } else {
+        const cd = resp.headers.get('Content-Disposition') || '';
+        const match = cd.match(/filename="(.+?)"/);
+        const filename = match ? match[1] : type + '_form';
+        const a = document.createElement('a');
+        a.href = url; a.download = filename; a.click();
+        URL.revokeObjectURL(url);
+      }
     });
   })
   .catch(err => alert('Error: ' + err.message));
