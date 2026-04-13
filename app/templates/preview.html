@@ -120,6 +120,9 @@
 </div>
 {% endif %}
 
-<script>const userId = {{ user.id if user else 'null' }};</script>
+<script>
+const userId = {{ user.id if user else 'null' }};
+const LABELS = { rfid_print_error: {{ labels.rfid_print_error | tojson }} };
+</script>
 <script src="{{ request.root_path }}/static/preview.js"></script>
 {% endblock %}

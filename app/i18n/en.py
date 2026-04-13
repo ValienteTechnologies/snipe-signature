@@ -28,6 +28,11 @@ EN_LABELS = Labels(
     back_to_search="← Back to search",
     drawer_language="Language",
     drawer_template="Template",
+    rfid_print_error="RFID print error",
+    rfid_range_invalid="Invalid range (max 1000 tags).",
+    rfid_range_starting="Starting…",
+    rfid_range_done="Done! Printed {total} tag(s).",
+    rfid_range_error="Error at {tag}: {message}",
     # Document — shared
     doc_condition_note="The assets listed below have been delivered in working condition.",
     # Document — checkout

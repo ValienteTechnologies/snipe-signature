@@ -56,5 +56,5 @@ function printRfid(tag) {
     if (!resp.ok) throw new Error(d.detail || 'Error');
     if (d.mesaj) alert(d.mesaj);
   }))
-  .catch(err => alert('RFID print error: ' + err.message));
+  .catch(err => alert(LABELS.rfid_print_error + ': ' + err.message));
 }

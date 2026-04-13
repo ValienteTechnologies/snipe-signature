@@ -28,12 +28,12 @@ async function printRfidRange(startTag, endTag) {
   const status = document.getElementById('rfid-status');
 
   if (end < start || total > 1000) {
-    status.textContent = 'Invalid range (max 1000 tags).';
+    status.textContent = LABELS.rfid_range_invalid;
     status.className = 'rfid-status rfid-error';
     return;
   }
 
-  status.textContent = 'Starting...';
+  status.textContent = LABELS.rfid_range_starting;
   status.className = 'rfid-status rfid-progress';
 
   for (let i = start; i <= end; i++) {
@@ -46,20 +46,20 @@ async function printRfidRange(startTag, endTag) {
       });
       const d = await resp.json().catch(() => ({}));
       if (!resp.ok) {
-        status.textContent = `Error at ${tag}: ${d.detail || 'unknown error'}`;
+        status.textContent = LABELS.rfid_range_error.replace('{tag}', tag).replace('{message}', d.detail || '?');
         status.className = 'rfid-status rfid-error';
         return;
       }
       status.textContent = d.mesaj || `Printing ${i - start + 1} / ${total} (${tag})…`;
     } catch (e) {
-      status.textContent = `Error at ${tag}: ${e.message}`;
+      status.textContent = LABELS.rfid_range_error.replace('{tag}', tag).replace('{message}', e.message);
       status.className = 'rfid-status rfid-error';
       return;
     }
     if (i < end) await new Promise(r => setTimeout(r, 100));
   }
 
-  status.textContent = `Done! Printed ${total} tag(s).`;
+  status.textContent = LABELS.rfid_range_done.replace('{total}', total);
   status.className = 'rfid-status rfid-done';
 }
 

@@ -38,6 +38,13 @@ class Labels:
     drawer_language: str
     drawer_template: str
 
+    # RFID
+    rfid_print_error: str
+    rfid_range_invalid: str
+    rfid_range_starting: str
+    rfid_range_done: str
+    rfid_range_error: str
+
     # Document — shared
     doc_condition_note: str
 

@@ -46,6 +46,14 @@
   </div>
 </div>
 
-<script>const RFID_ENABLED = {{ 'true' if rfid_enabled else 'false' }};</script>
+<script>
+const RFID_ENABLED = {{ 'true' if rfid_enabled else 'false' }};
+const LABELS = {
+  rfid_range_invalid: {{ labels.rfid_range_invalid | tojson }},
+  rfid_range_starting: {{ labels.rfid_range_starting | tojson }},
+  rfid_range_done: {{ labels.rfid_range_done | tojson }},
+  rfid_range_error: {{ labels.rfid_range_error | tojson }},
+};
+</script>
 <script src="{{ request.root_path }}/static/index.js"></script>
 {% endblock %}

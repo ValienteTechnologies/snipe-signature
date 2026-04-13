@@ -28,6 +28,11 @@ TR_LABELS = Labels(
     back_to_search="← Aramaya dön",
     drawer_language="Dil",
     drawer_template="Şablon",
+    rfid_print_error="RFID yazdırma hatası",
+    rfid_range_invalid="Geçersiz aralık (maksimum 1000 etiket).",
+    rfid_range_starting="Başlıyor…",
+    rfid_range_done="{total} etiket yazdırıldı.",
+    rfid_range_error="{tag} etiketinde hata: {message}",
     # Document — shared
     doc_condition_note="Aşağıda listelenen demirbaşlar çalışır durumda teslim edilmiştir.",
     # Document — checkout
