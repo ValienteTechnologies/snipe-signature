@@ -54,11 +54,17 @@ def _build_sbpl(label: LabelData) -> bytes:
     return command.encode("utf-8")
 
 
-def _send_sync(ip: str, port: int, payload: bytes, timeout: float) -> None:
+def _send_sync(ip: str, port: int, payload: bytes, timeout: float) -> str:
+    """Send SBPL payload and return any printer response (empty string if none)."""
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(timeout)
         s.connect((ip, port))
         s.sendall(payload)
+        try:
+            response = s.recv(2048)
+            return response.decode("ascii", errors="replace").strip()
+        except TimeoutError:
+            return ""
 
 
 async def print_label(
@@ -67,12 +73,14 @@ async def print_label(
     port: int,
     label: LabelData,
     timeout: float = 5.0,
-) -> None:
+) -> str:
     """Send a label print job to the SATO printer over raw TCP.
 
+    Returns the raw printer response string (may be empty).
     Raises OSError on connection or send failure.
     """
     payload = _build_sbpl(label)
     logger.debug("Sending %d bytes to SATO printer %s:%d (tag=%r)", len(payload), ip, port, label.asset_tag)
-    await asyncio.to_thread(_send_sync, ip, port, payload, timeout)
-    logger.info("Label sent to SATO printer %s:%d for tag=%r", ip, port, label.asset_tag)
+    response = await asyncio.to_thread(_send_sync, ip, port, payload, timeout)
+    logger.info("SATO printer %s:%d response for tag=%r: %r", ip, port, label.asset_tag, response or "<none>")
+    return response

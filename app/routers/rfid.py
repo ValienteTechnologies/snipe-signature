@@ -40,7 +40,7 @@ async def rfid_print(body: RfidPrintRequest, settings: SettingsDep, snipeit: Sni
     )
 
     try:
-        await sato.print_label(
+        printer_response = await sato.print_label(
             ip=settings.sato_printer_ip,
             port=settings.sato_printer_port,
             label=label,
@@ -49,4 +49,4 @@ async def rfid_print(body: RfidPrintRequest, settings: SettingsDep, snipeit: Sni
         logger.warning("SATO printer connection failed: %s", exc)
         raise HTTPException(status_code=502, detail=f"Could not reach printer: {exc}")
 
-    return {"ok": True, "tag": asset.asset_tag}
+    return {"ok": True, "tag": asset.asset_tag, "printer_response": printer_response or None}
