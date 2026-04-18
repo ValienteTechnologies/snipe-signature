@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     # SATO RFID label printer — leave SATO_PRINTER_IP blank to disable the Print Tag button
     sato_printer_ip: str | None = None
     sato_printer_port: int = 9100
-    # Base URL for QR codes printed on labels (asset ID appended automatically)
-    sato_qr_base_url: str = "https://envanter.ceylanholding.net/hardware/"
+    # Base URL for QR codes printed on labels (asset ID appended); e.g. https://snipeit.example.com/hardware/
+    sato_qr_base_url: str = ""
 
     @field_validator("logo_path", "sato_printer_ip", mode="before")
     @classmethod
@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     @property
     def snipeit_base_url(self) -> str:
         return str(self.snipeit_url).rstrip("/")
+
+    @property
+    def sato_qr_base(self) -> str:
+        return self.sato_qr_base_url.rstrip("/")
 
 
 _settings: Settings | None = None

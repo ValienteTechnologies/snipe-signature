@@ -30,20 +30,20 @@ async def rfid_print(body: RfidPrintRequest, settings: SettingsDep, snipeit: Sni
     except AssetNotFound:
         raise HTTPException(status_code=404, detail=f"Asset '{body.tag}' not found in Snipe-IT")
 
-    qr_url = f"{settings.sato_qr_base_url.rstrip('/')}/{asset.id}"
-    manufacturer = asset.manufacturer.name if asset.manufacturer else "Unknown"
-    model = asset.model.name if asset.model else "Unknown"
+    label = sato.LabelData(
+        asset_id=str(asset.id),
+        asset_tag=asset.asset_tag,
+        manufacturer=asset.manufacturer_name or "Unknown",
+        model=asset.model_name or "Unknown",
+        qr_data=f"{settings.sato_qr_base}/{asset.id}",
+        chip_data=str(asset.id),
+    )
 
     try:
         await sato.print_label(
             ip=settings.sato_printer_ip,
             port=settings.sato_printer_port,
-            asset_id=str(asset.id),
-            asset_tag=asset.asset_tag,
-            manufacturer=manufacturer,
-            model=model,
-            qr_data=qr_url,
-            chip_data=str(asset.id),
+            label=label,
         )
     except OSError as exc:
         logger.warning("SATO printer connection failed: %s", exc)
