@@ -26,10 +26,13 @@ class Settings(BaseSettings):
     # Footer text printed at the bottom of every generated document (PDF and DOCX)
     doc_footer_text: str = ""
 
-    # RFID printer service URL (internal) — leave blank to disable the Print Tag button
-    rfid_printer_url: AnyHttpUrl | None = None
+    # SATO RFID label printer — leave SATO_PRINTER_IP blank to disable the Print Tag button
+    sato_printer_ip: str | None = None
+    sato_printer_port: int = 9100
+    # Base URL for QR codes printed on labels (asset ID appended automatically)
+    sato_qr_base_url: str = "https://envanter.ceylanholding.net/hardware/"
 
-    @field_validator("logo_path", "rfid_printer_url", mode="before")
+    @field_validator("logo_path", "sato_printer_ip", mode="before")
     @classmethod
     def _empty_str_to_none(cls, v: object) -> object:
         if isinstance(v, str) and not v.strip():

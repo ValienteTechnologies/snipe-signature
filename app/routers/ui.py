@@ -28,7 +28,7 @@ async def index(request: Request, labels: LabelsDep, settings: SettingsDep) -> H
     return templates.TemplateResponse(
         request,
         "index.html",
-        {"labels": labels, "rfid_enabled": settings.rfid_printer_url is not None},
+        {"labels": labels, "rfid_enabled": settings.sato_printer_ip is not None},
     )
 
 
@@ -85,7 +85,7 @@ async def asset_preview(
             "lookup_type": "asset",
             "lookup_value": tag,
             "error": error,
-            "rfid_enabled": settings.rfid_printer_url is not None,
+            "rfid_enabled": settings.sato_printer_ip is not None,
         },
     )
 
@@ -128,6 +128,6 @@ async def user_preview(
             "lookup_type": "user",
             "lookup_value": username,
             "error": error,
-            "rfid_enabled": settings.rfid_printer_url is not None,
+            "rfid_enabled": settings.sato_printer_ip is not None,
         },
     )
