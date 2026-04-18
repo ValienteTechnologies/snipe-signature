@@ -54,23 +54,14 @@ All configuration is via environment variables (or a `.env` file):
 | `APP_PORT` | No | `8000` | Port to listen on |
 | `LOGO_PATH` | No | — | Absolute path to a logo image for documents |
 | `DOC_FOOTER_TEXT` | No | — | Footer text printed on every generated document |
-| `RFID_PRINTER_URL` | No | — | Internal RFID printer service URL (see below) |
+| `SATO_PRINTER_IP` | No | — | IP address of the SATO RFID label printer (leave blank to disable) |
+| `SATO_PRINTER_PORT` | No | `9100` | TCP port of the SATO printer |
+| `SATO_QR_BASE_URL` | No | — | Base URL for QR codes on labels (asset ID is appended, e.g. `https://snipeit.example.com/hardware/`) |
 
 ## RFID Printer
 
-When `RFID_PRINTER_URL` is set, the app exposes two ways to print RFID labels:
+When `SATO_PRINTER_IP` is set, the app communicates directly with the SATO label printer over raw TCP (SBPL protocol) and exposes two ways to print RFID labels:
 
-**Single tag** — a printer icon button appears in each row of the asset table on the preview page. Click it to send that asset's tag to the printer.
+**Single tag** — a printer icon button appears in each row of the asset table on the preview page. Click it to print that asset's label. The printer's response is shown inline next to the button.
 
 **Range** — on the home page, type a range into the asset search box (e.g. `00001-00010`) and press Enter. The app prints each tag in sequence and shows live progress. Tags must be zero-padded numeric; maximum 1000 tags per range.
-
-The app proxies print requests to the configured service:
-
-```
-POST {RFID_PRINTER_URL}
-Content-Type: application/json
-
-{"tag": "00001"}
-```
-
-The printer service's response is passed back to the UI and displayed to the user.

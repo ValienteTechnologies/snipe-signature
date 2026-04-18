@@ -50,7 +50,7 @@ async function printRfidRange(startTag, endTag) {
         status.className = 'rfid-status rfid-error';
         return;
       }
-      status.textContent = d.mesaj || `Printing ${i - start + 1} / ${total} (${tag})…`;
+      status.textContent = `Printing ${i - start + 1} / ${total} (${tag})…`;
     } catch (e) {
       status.textContent = LABELS.rfid_range_error.replace('{tag}', tag).replace('{message}', e.message);
       status.className = 'rfid-status rfid-error';

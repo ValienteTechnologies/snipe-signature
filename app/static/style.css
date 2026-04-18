@@ -139,6 +139,11 @@ body {
 .btn-docx:hover { background: #1d4ed8; }
 .btn-rfid { background: #6b7280; color: #fff; border: none; border-radius: 4px; padding: .25rem .35rem; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; }
 .btn-rfid:hover { background: #4b5563; }
+.btn-rfid--ok { background: #16a34a; }
+.btn-rfid--error { background: #dc2626; }
+.rfid-btn-status { margin-left: .35rem; font-size: .75rem; vertical-align: middle; }
+.rfid-btn-ok { color: #16a34a; }
+.rfid-btn-err { color: #dc2626; }
 .rfid-status { margin-top: .6rem; font-size: .85rem; padding: .3rem .5rem; border-radius: 4px; }
 .rfid-progress { background: #eff6ff; color: #1d4ed8; }
 .rfid-done    { background: #f0fdf4; color: #15803d; }

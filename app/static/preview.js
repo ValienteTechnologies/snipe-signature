@@ -46,7 +46,10 @@ function submitForm(type, fmt) {
   .catch(err => alert('Error: ' + err.message));
 }
 
-function printRfid(tag) {
+function printRfid(tag, btn) {
+  btn.disabled = true;
+  btn.classList.remove('btn-rfid--ok', 'btn-rfid--error');
+
   fetch(ROOT_PATH + '/rfid/print', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -54,7 +57,20 @@ function printRfid(tag) {
   })
   .then(resp => resp.json().then(d => {
     if (!resp.ok) throw new Error(d.detail || 'Error');
-    if (d.mesaj) alert(d.mesaj);
+    btn.classList.add('btn-rfid--ok');
+    const status = btn.nextElementSibling;
+    if (status && status.classList.contains('rfid-btn-status')) {
+      status.textContent = d.printer_response || '✓';
+      status.className = 'rfid-btn-status rfid-btn-ok';
+    }
   }))
-  .catch(err => alert(LABELS.rfid_print_error + ': ' + err.message));
+  .catch(err => {
+    btn.classList.add('btn-rfid--error');
+    const status = btn.nextElementSibling;
+    if (status && status.classList.contains('rfid-btn-status')) {
+      status.textContent = err.message;
+      status.className = 'rfid-btn-status rfid-btn-err';
+    }
+  })
+  .finally(() => { btn.disabled = false; });
 }
