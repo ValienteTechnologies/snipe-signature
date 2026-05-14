@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     # Footer text printed at the bottom of every generated document (PDF and DOCX)
     doc_footer_text: str = ""
 
+    # Demo mode — exposes /demo and /forms/demo/* with hardcoded assets (no Snipe-IT needed)
+    demo: bool = False
+
     # SATO RFID label printer — leave SATO_PRINTER_IP blank to disable the Print Tag button
     sato_printer_ip: str | None = None
     sato_printer_port: int = 9100

@@ -140,6 +140,9 @@ async def demo_preview(
     labels: LabelsDep,
     settings: SettingsDep,
 ) -> HTMLResponse:
+    if not settings.demo:
+        from fastapi import HTTPException
+        raise HTTPException(status_code=404)
     return templates.TemplateResponse(
         request,
         "preview.html",

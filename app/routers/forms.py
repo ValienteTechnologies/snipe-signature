@@ -117,6 +117,8 @@ async def demo_checkout_form(
     settings: SettingsDep = ...,
     background: BackgroundTasks = ...,
 ) -> Response:
+    if not settings.demo:
+        raise HTTPException(status_code=404)
     enriched = filter_by_ids(body.asset_ids)
     if not enriched:
         raise HTTPException(status_code=400, detail="No valid demo assets provided.")
@@ -140,6 +142,8 @@ async def demo_return_form(
     settings: SettingsDep = ...,
     background: BackgroundTasks = ...,
 ) -> Response:
+    if not settings.demo:
+        raise HTTPException(status_code=404)
     enriched = filter_by_ids(body.asset_ids)
     if not enriched:
         raise HTTPException(status_code=400, detail="No valid demo assets provided.")
