@@ -5,29 +5,11 @@
 {% endif %}
 <div class="card search-card">
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('asset', this)">{{ labels.tab_asset }}</button>
-    <button class="tab-btn" onclick="switchTab('user', this)">{{ labels.tab_user }}</button>
+    <button class="tab-btn active" onclick="switchTab('user', this)">{{ labels.tab_user }}</button>
+    <button class="tab-btn" onclick="switchTab('asset', this)">{{ labels.tab_asset }}</button>
   </div>
 
-  <div class="tab-panel" id="panel-asset">
-    <div class="input-group">
-      <input
-        type="text"
-        id="tag-input"
-        placeholder="{{ labels.search_placeholder_tag }}{% if rfid_enabled %} / {{ labels.search_placeholder_tag_rfid_hint }}{% endif %}"
-        autocomplete="off"
-        class="input"
-      >
-      <button type="button" class="btn btn-primary" onclick="lookupAsset()">
-        {{ labels.btn_lookup_asset }}
-      </button>
-    </div>
-    {% if rfid_enabled %}
-    <div id="rfid-status" class="rfid-status hidden"></div>
-    {% endif %}
-  </div>
-
-  <div class="tab-panel hidden" id="panel-user">
+  <div class="tab-panel" id="panel-user">
     <div class="user-search-wrap">
       <div class="input-group">
         <input
@@ -43,6 +25,24 @@
       </div>
       <ul id="user-dropdown" class="user-dropdown hidden"></ul>
     </div>
+  </div>
+
+  <div class="tab-panel hidden" id="panel-asset">
+    <div class="input-group">
+      <input
+        type="text"
+        id="tag-input"
+        placeholder="{{ labels.search_placeholder_tag }}{% if rfid_enabled %} / {{ labels.search_placeholder_tag_rfid_hint }}{% endif %}"
+        autocomplete="off"
+        class="input"
+      >
+      <button type="button" class="btn btn-primary" onclick="lookupAsset()">
+        {{ labels.btn_lookup_asset }}
+      </button>
+    </div>
+    {% if rfid_enabled %}
+    <div id="rfid-status" class="rfid-status hidden"></div>
+    {% endif %}
   </div>
 </div>
 
