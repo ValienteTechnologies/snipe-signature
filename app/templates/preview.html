@@ -122,7 +122,8 @@
 
 <script>
 const userId = {{ user.id if user else 'null' }};
+const IS_DEMO = {{ 'true' if is_demo is defined and is_demo else 'false' }};
 const LABELS = { rfid_print_error: {{ labels.rfid_print_error | tojson }} };
 </script>
-<script src="{{ request.root_path }}/static/preview.js"></script>
+<script src="{{ request.root_path }}/static/preview.js?v=2"></script>
 {% endblock %}

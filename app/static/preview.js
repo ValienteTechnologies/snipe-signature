@@ -21,7 +21,10 @@ function submitForm(type, fmt) {
   if (typeof userId !== 'undefined' && userId !== null) body.user_id = userId;
 
   const tmpl = localStorage.getItem('doc-template') || 'uwagi';
-  fetch(ROOT_PATH + '/forms/' + type + '?fmt=' + fmt + '&template=' + encodeURIComponent(tmpl), {
+  const formsBase = (typeof IS_DEMO !== 'undefined' && IS_DEMO)
+    ? ROOT_PATH + '/forms/demo/' + type
+    : ROOT_PATH + '/forms/' + type;
+  fetch(formsBase + '?fmt=' + fmt + '&template=' + encodeURIComponent(tmpl), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

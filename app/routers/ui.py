@@ -11,6 +11,7 @@ from fastapi import APIRouter, Query, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 
+from app.demo_data import DEMO_USER, all_checkout, all_return
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
 from app.documents.registry import available_templates
 from app.snipeit.client import AssetNotFound, UserNotFound
@@ -128,6 +129,29 @@ async def user_preview(
             "lookup_type": "user",
             "lookup_value": username,
             "error": error,
+            "rfid_enabled": settings.sato_printer_ip is not None,
+        },
+    )
+
+
+@router.get("/demo", response_class=HTMLResponse)
+async def demo_preview(
+    request: Request,
+    labels: LabelsDep,
+    settings: SettingsDep,
+) -> HTMLResponse:
+    return templates.TemplateResponse(
+        request,
+        "preview.html",
+        {
+            "labels": labels,
+            "checkout_enriched": all_checkout(),
+            "return_enriched": all_return(),
+            "user": DEMO_USER,
+            "lookup_type": "user",
+            "lookup_value": "demo.user",
+            "error": None,
+            "is_demo": True,
             "rfid_enabled": settings.sato_printer_ip is not None,
         },
     )
