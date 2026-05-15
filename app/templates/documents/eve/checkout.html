@@ -49,7 +49,7 @@
   .eve-sig-line { font-size: 10pt; color: #888; font-style: italic; }
 {% endblock %}
 {% block content %}
-{% set pages = enriched | batch(12) | list %}
+{% set pages = enriched | batch(10) | list %}
 {% for page_items in pages %}
 <div class="page-container">
   <div class="eve-header">

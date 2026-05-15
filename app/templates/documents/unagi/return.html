@@ -24,7 +24,7 @@
   .page-num { font-size: 11pt; font-weight: bold; color: #3d5a80; white-space: nowrap; align-self: center; }
 {% endblock %}
 {% block content %}
-{% set pages = enriched | batch(12) | list %}
+{% set pages = enriched | batch(10) | list %}
 {% for page_items in pages %}
 <div class="page-container">
   <div class="header">
