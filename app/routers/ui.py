@@ -13,15 +13,17 @@ from fastapi.templating import Jinja2Templates
 
 from app.demo_data import DEMO_USER, all_checkout, all_return
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
-from app.documents.registry import available_templates
+from app.documents.registry import available_templates as _available_templates
 from app.snipeit.client import AssetNotFound, UserNotFound
 
 _TEMPLATES_DIR = Path(__file__).parent.parent / "templates"
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
-templates.env.globals["doc_templates"] = available_templates()
 
+
+def _ctx(**kwargs) -> dict:
+    return {"doc_templates": _available_templates(), **kwargs}
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -29,7 +31,7 @@ async def index(request: Request, labels: LabelsDep, settings: SettingsDep) -> H
     return templates.TemplateResponse(
         request,
         "index.html",
-        {"labels": labels, "rfid_enabled": settings.sato_printer_ip is not None},
+        _ctx(labels=labels, rfid_enabled=settings.sato_printer_ip is not None),
     )
 
 
@@ -78,16 +80,16 @@ async def asset_preview(
     return templates.TemplateResponse(
         request,
         "preview.html",
-        {
-            "labels": labels,
-            "checkout_enriched": enriched,
-            "return_enriched": None,
-            "user": user,
-            "lookup_type": "asset",
-            "lookup_value": tag,
-            "error": error,
-            "rfid_enabled": settings.sato_printer_ip is not None,
-        },
+        _ctx(
+            labels=labels,
+            checkout_enriched=enriched,
+            return_enriched=None,
+            user=user,
+            lookup_type="asset",
+            lookup_value=tag,
+            error=error,
+            rfid_enabled=settings.sato_printer_ip is not None,
+        ),
     )
 
 
@@ -121,16 +123,16 @@ async def user_preview(
     return templates.TemplateResponse(
         request,
         "preview.html",
-        {
-            "labels": labels,
-            "checkout_enriched": checkout_enriched,
-            "return_enriched": return_enriched,
-            "user": user,
-            "lookup_type": "user",
-            "lookup_value": username,
-            "error": error,
-            "rfid_enabled": settings.sato_printer_ip is not None,
-        },
+        _ctx(
+            labels=labels,
+            checkout_enriched=checkout_enriched,
+            return_enriched=return_enriched,
+            user=user,
+            lookup_type="user",
+            lookup_value=username,
+            error=error,
+            rfid_enabled=settings.sato_printer_ip is not None,
+        ),
     )
 
 
@@ -146,15 +148,15 @@ async def demo_preview(
     return templates.TemplateResponse(
         request,
         "preview.html",
-        {
-            "labels": labels,
-            "checkout_enriched": all_checkout(),
-            "return_enriched": all_return(),
-            "user": DEMO_USER,
-            "lookup_type": "user",
-            "lookup_value": "demo.user",
-            "error": None,
-            "is_demo": True,
-            "rfid_enabled": settings.sato_printer_ip is not None,
-        },
+        _ctx(
+            labels=labels,
+            checkout_enriched=all_checkout(),
+            return_enriched=all_return(),
+            user=DEMO_USER,
+            lookup_type="user",
+            lookup_value="demo.user",
+            error=None,
+            is_demo=True,
+            rfid_enabled=settings.sato_printer_ip is not None,
+        ),
     )

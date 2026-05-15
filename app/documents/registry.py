@@ -9,6 +9,10 @@ To add a new template:
 
 from __future__ import annotations
 
+from pathlib import Path
+
+_TEMPLATES_DIR = Path(__file__).parent.parent / "templates" / "documents"
+
 # name → display label (order preserved — first entry is the default)
 TEMPLATES: dict[str, str] = {
     "unagi": "Unagi",
@@ -19,8 +23,8 @@ DEFAULT_TEMPLATE = "unagi"
 
 
 def available_templates() -> list[tuple[str, str]]:
-    """Return list of (id, label) pairs for all registered templates."""
-    return list(TEMPLATES.items())
+    """Return list of (id, label) pairs for templates whose directories exist on disk."""
+    return [(name, label) for name, label in TEMPLATES.items() if (_TEMPLATES_DIR / name).is_dir()]
 
 
 def checkout_pdf_template(template: str) -> str:
