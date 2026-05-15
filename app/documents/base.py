@@ -41,11 +41,16 @@ def set_landscape(doc: Document) -> None:
     section.page_width, section.page_height = section.page_height, section.page_width
 
 
-def add_logo(doc: Document, logo_path: Path, width_inches: float = 2.2) -> None:
+def add_logo(doc: Document, logo_path: Path, max_w: float = 2.2, max_h: float = 1.1) -> None:
+    from PIL import Image as PILImage
+
+    img = PILImage.open(logo_path)
+    w, h = img.size
+    scale = min(max_w / w, max_h / h)
     para = doc.paragraphs[0] if doc.paragraphs else doc.add_paragraph()
     para.alignment = WD_ALIGN_PARAGRAPH.LEFT
     run = para.add_run()
-    run.add_picture(str(logo_path), width=Inches(width_inches))
+    run.add_picture(str(logo_path), width=Inches(w * scale), height=Inches(h * scale))
 
 
 def set_cell_bg(cell, hex_color: str) -> None:

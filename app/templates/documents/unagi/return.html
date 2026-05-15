@@ -24,8 +24,8 @@
   .page-num { font-size: 11pt; font-weight: bold; color: #3d5a80; white-space: nowrap; align-self: center; }
 {% endblock %}
 {% block content %}
-{% set total_pages = enriched | batch(12) | list | length %}
-{% for page_items in enriched | batch(12) %}
+{% set pages = enriched | batch(12) | list %}
+{% for page_items in pages %}
 <div class="page-container">
   <div class="header">
     {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
@@ -33,7 +33,7 @@
       <h1>{{ labels.doc_return_title }}</h1>
       <div class="subtitle">{{ generated_at }}</div>
     </div>
-    {% if total_pages > 1 %}<div class="page-num">{{ loop.index }}/{{ total_pages }}</div>{% endif %}
+    {% if pages | length > 1 %}<div class="page-num">{{ loop.index }}/{{ pages | length }}</div>{% endif %}
   </div>
 
   <div class="body-center">

@@ -49,14 +49,14 @@
   .eve-sig-line { font-size: 10pt; color: #888; font-style: italic; }
 {% endblock %}
 {% block content %}
-{% set total_pages = enriched | batch(12) | list | length %}
-{% for page_items in enriched | batch(12) %}
+{% set pages = enriched | batch(12) | list %}
+{% for page_items in pages %}
 <div class="page-container">
   <div class="eve-header">
     {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
     <div class="eve-header-right">
       <div class="eve-date">{{ generated_at }}</div>
-      {% if total_pages > 1 %}<div class="page-num">{{ loop.index }}/{{ total_pages }}</div>{% endif %}
+      {% if pages | length > 1 %}<div class="page-num">{{ loop.index }}/{{ pages | length }}</div>{% endif %}
     </div>
   </div>
 
