@@ -2,15 +2,18 @@
 {% block extra_styles %}
   .header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
     border-bottom: 2px solid #333;
     padding-bottom: 6px;
   }
-  .header img { max-height: 110px; max-width: 220px; margin-right: 16px; }
-  .header-text { flex: 1; }
+  .header-left { display: flex; align-items: center; }
+  .header-left img { max-height: 110px; max-width: 220px; margin-right: 16px; }
   .header-text h1 { margin: 0; font-size: 14pt; font-weight: bold; }
   .header-text .subtitle { font-size: 10pt; color: #555; }
+  .header-right { text-align: right; }
+  .page-num { font-size: 11pt; font-weight: bold; color: #3d5a80; }
   .condition-note { font-size: 10pt; font-style: italic; color: #444; margin: 4px 0 8px; }
   table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
   th { background: #3d5a80; color: #fff; padding: 8px 6px; text-align: center; font-size: 11pt; }
@@ -21,17 +24,21 @@
   .sig-table td { border: 1px solid #bbb; padding: 9px; text-align: center; height: 38px; }
   .sig-name-row td { font-weight: bold; }
   .sig-line-row td { color: #888; font-style: italic; font-size: 10pt; }
-  @page { @top-right { content: counter(page) " / " counter(pages); font-size: 10pt; font-weight: bold; color: #3d5a80; } }
 {% endblock %}
 {% block content %}
 {% set pages = enriched | batch(page_size) | list %}
 {% for page_items in pages %}
 <div class="page-container">
   <div class="header">
-    {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
-    <div class="header-text">
-      <h1>{{ labels.doc_return_title }}</h1>
-      <div class="subtitle">{{ generated_at }}</div>
+    <div class="header-left">
+      {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
+      <div class="header-text">
+        <h1>{{ labels.doc_return_title }}</h1>
+        <div class="subtitle">{{ generated_at }}</div>
+      </div>
+    </div>
+    <div class="header-right">
+      {% if pages | length > 1 %}<div class="page-num">{{ loop.index }} / {{ pages | length }}</div>{% endif %}
     </div>
   </div>
 
