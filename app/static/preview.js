@@ -12,7 +12,7 @@ function toggleAll(cb, formType) {
   document.querySelectorAll('.asset-check-' + formType).forEach(c => c.checked = cb.checked);
 }
 
-function submitForm(type, fmt) {
+function submitForm(type) {
   const ids = Array.from(document.querySelectorAll('.asset-check-' + type + ':checked'))
     .map(c => parseInt(c.value));
   if (!ids.length) { alert('Select at least one asset.'); return; }
@@ -24,7 +24,7 @@ function submitForm(type, fmt) {
   const formsBase = (typeof IS_DEMO !== 'undefined' && IS_DEMO)
     ? ROOT_PATH + '/forms/demo/' + type
     : ROOT_PATH + '/forms/' + type;
-  fetch(formsBase + '?fmt=' + fmt + '&template=' + encodeURIComponent(tmpl), {
+  fetch(formsBase + '?template=' + encodeURIComponent(tmpl), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),
@@ -33,17 +33,8 @@ function submitForm(type, fmt) {
     if (!resp.ok) return resp.json().then(d => { throw new Error(d.detail || 'Error'); });
     return resp.blob().then(blob => {
       const url = URL.createObjectURL(blob);
-      if (fmt === 'pdf') {
-        window.open(url, '_blank');
-        setTimeout(() => URL.revokeObjectURL(url), 30000);
-      } else {
-        const cd = resp.headers.get('Content-Disposition') || '';
-        const match = cd.match(/filename="(.+?)"/);
-        const filename = match ? match[1] : type + '_form';
-        const a = document.createElement('a');
-        a.href = url; a.download = filename; a.click();
-        URL.revokeObjectURL(url);
-      }
+      window.open(url, '_blank');
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
     });
   })
   .catch(err => alert('Error: ' + err.message));

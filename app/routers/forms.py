@@ -13,7 +13,7 @@ from pydantic import BaseModel
 from app.demo_data import DEMO_USER, filter_by_ids
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
 from app.documents.pdf import build_checkout_pdf, build_return_pdf
-from app.documents.registry import DEFAULT_TEMPLATE, available_templates
+from app.documents.registry import DEFAULT_TEMPLATE
 from app.snipeit.client import AssetNotFound, UserNotFound
 from app.snipeit.models import AssetWithActivity, User
 

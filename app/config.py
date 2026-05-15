@@ -23,7 +23,7 @@ class Settings(BaseSettings):
 
     # Branding — path to a logo image used in generated documents
     logo_path: Path | None = None
-    # Footer text printed at the bottom of every generated document (PDF and DOCX)
+    # Footer text printed at the bottom of every generated PDF
     doc_footer_text: str = ""
 
     # Demo mode — exposes /demo and /forms/demo/* with hardcoded assets (no Snipe-IT needed)
