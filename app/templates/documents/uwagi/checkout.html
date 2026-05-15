@@ -21,8 +21,10 @@
   .sig-table td { border: 1px solid #bbb; padding: 9px; text-align: center; height: 38px; }
   .sig-name-row td { font-weight: bold; }
   .sig-line-row td { color: #888; font-style: italic; font-size: 10pt; }
+  .page-num { font-size: 11pt; font-weight: bold; color: #3d5a80; white-space: nowrap; align-self: center; }
 {% endblock %}
 {% block content %}
+{% set total_pages = enriched | batch(12) | list | length %}
 {% for page_items in enriched | batch(12) %}
 <div class="page-container">
   <div class="header">
@@ -31,6 +33,7 @@
       <h1>{{ labels.doc_checkout_title }}</h1>
       <div class="subtitle">{{ generated_at }}</div>
     </div>
+    {% if total_pages > 1 %}<div class="page-num">{{ loop.index }}/{{ total_pages }}</div>{% endif %}
   </div>
 
   <div class="body-center">
