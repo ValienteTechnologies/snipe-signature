@@ -14,20 +14,19 @@
     }
     {% endif %}
   }
-  html { height: 100%; }
+  html, body { height: 100%; margin: 0; }
   body {
     font-family: "DejaVu Sans", Arial, sans-serif;
     font-size: 11pt;
     color: #1a1a1a;
+  }
+  .page-container {
     height: 100%;
     display: flex;
     flex-direction: column;
   }
-  .content-wrap {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+  .page-container + .page-container {
+    break-before: page;
   }
   .body-center {
     display: flex;
@@ -39,8 +38,6 @@
 </style>
 </head>
 <body>
-<div class="content-wrap">
 {% block content %}{% endblock %}
-</div>
 </body>
 </html>

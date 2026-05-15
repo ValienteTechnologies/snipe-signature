@@ -23,63 +23,68 @@
   .sig-line-row td { color: #888; font-style: italic; font-size: 10pt; }
 {% endblock %}
 {% block content %}
-<div class="header">
-  {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
-  <div class="header-text">
-    <h1>{{ labels.doc_return_title }}</h1>
-    <div class="subtitle">{{ generated_at }}</div>
+{% for page_items in enriched | batch(12) %}
+<div class="page-container">
+  <div class="header">
+    {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
+    <div class="header-text">
+      <h1>{{ labels.doc_return_title }}</h1>
+      <div class="subtitle">{{ generated_at }}</div>
+    </div>
   </div>
+
+  <div class="body-center">
+  <p class="condition-note">{{ labels.doc_condition_note }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{{ labels.col_asset_tag }}</th>
+        <th>{{ labels.col_manufacturer }}</th>
+        <th>{{ labels.col_model }}</th>
+        <th>{{ labels.col_category }}</th>
+        <th>{{ labels.col_serial }}</th>
+        <th>{{ labels.col_return_date }}</th>
+        <th>{{ labels.doc_issued_by }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in page_items %}
+      {% set asset = item.asset %}
+      <tr>
+        <td>{{ asset.asset_tag }}</td>
+        <td>{{ asset.manufacturer_name }}</td>
+        <td>{{ asset.model_name }}</td>
+        <td>{{ asset.category_name }}</td>
+        <td>{{ asset.serial_display }}</td>
+        <td>{{ today }}</td>
+        <td>{{ item.admin_name or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+
+  {% if loop.last %}
+  <table class="sig-table">
+    <thead>
+      <tr>
+        <th>{{ labels.doc_returned_by }}</th>
+        <th>{{ labels.doc_received_by_admin }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="sig-name-row">
+        <td>{{ user.display_name }}</td>
+        <td></td>
+      </tr>
+      <tr class="sig-line-row">
+        <td>{{ labels.doc_signature }}: _______________</td>
+        <td>{{ labels.doc_signature }}: _______________</td>
+      </tr>
+    </tbody>
+  </table>
+  {% endif %}
 </div>
-
-<div class="body-center">
-<p class="condition-note">{{ labels.doc_condition_note }}</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>{{ labels.col_asset_tag }}</th>
-      <th>{{ labels.col_manufacturer }}</th>
-      <th>{{ labels.col_model }}</th>
-      <th>{{ labels.col_category }}</th>
-      <th>{{ labels.col_serial }}</th>
-      <th>{{ labels.col_return_date }}</th>
-      <th>{{ labels.doc_issued_by }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in enriched %}
-    {% set asset = item.asset %}
-    <tr>
-      <td>{{ asset.asset_tag }}</td>
-      <td>{{ asset.manufacturer_name }}</td>
-      <td>{{ asset.model_name }}</td>
-      <td>{{ asset.category_name }}</td>
-      <td>{{ asset.serial_display }}</td>
-      <td>{{ today }}</td>
-      <td>{{ item.admin_name or "-" }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-</div>
-
-<table class="sig-table">
-  <thead>
-    <tr>
-      <th>{{ labels.doc_returned_by }}</th>
-      <th>{{ labels.doc_received_by_admin }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr class="sig-name-row">
-      <td>{{ user.display_name }}</td>
-      <td></td>
-    </tr>
-    <tr class="sig-line-row">
-      <td>{{ labels.doc_signature }}: _______________</td>
-      <td>{{ labels.doc_signature }}: _______________</td>
-    </tr>
-  </tbody>
-</table>
+{% endfor %}
 {% endblock %}
