@@ -7,7 +7,9 @@
     margin-bottom: 10px;
   }
   .eve-header img { max-height: 110px; }
+  .eve-header-right { text-align: right; }
   .eve-date { font-size: 10pt; color: #555; }
+  .page-num { font-size: 11pt; font-weight: bold; color: #1a5c38; margin-top: 4px; }
   .eve-title {
     text-align: center;
     font-size: 18pt;
@@ -47,61 +49,71 @@
   .eve-sig-line { font-size: 10pt; color: #888; font-style: italic; }
 {% endblock %}
 {% block content %}
-<div class="eve-header">
-  {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
-  <div class="eve-date">{{ generated_at }}</div>
-</div>
-
-<div class="eve-title">{{ labels.doc_checkout_title }}</div>
-
-<div class="body-center">
-<p class="condition-note">{{ labels.doc_condition_note }}</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>{{ labels.col_asset_tag }}</th>
-      <th>{{ labels.col_manufacturer }}</th>
-      <th>{{ labels.col_model }}</th>
-      <th>{{ labels.col_category }}</th>
-      <th>{{ labels.col_serial }}</th>
-      <th>{{ labels.col_checkout_date }}</th>
-      <th>{{ labels.doc_issued_by }}</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for item in enriched %}
-    {% set asset = item.asset %}
-    <tr>
-      <td>{{ asset.asset_tag }}</td>
-      <td>{{ asset.manufacturer_name }}</td>
-      <td>{{ asset.model_name }}</td>
-      <td>{{ asset.category_name }}</td>
-      <td>{{ asset.serial_display }}</td>
-      <td>
-        {% if item.activity_date %}
-          {{ item.activity_date.strftime("%Y-%m-%d") }}
-        {% elif asset.last_checkout %}
-          {{ asset.last_checkout.strftime("%Y-%m-%d") }}
-        {% else %}-{% endif %}
-      </td>
-      <td>{{ item.admin_name or "-" }}</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
-
-<div class="eve-sig">
-  <div class="eve-sig-col">
-    <div class="eve-sig-role">{{ labels.doc_issued_by }}</div>
-    <div class="eve-sig-name"></div>
-    <div class="eve-sig-line">{{ labels.doc_signature }}: _______________</div>
+{% set total_pages = enriched | batch(12) | list | length %}
+{% for page_items in enriched | batch(12) %}
+<div class="page-container">
+  <div class="eve-header">
+    {% if logo_uri %}<img src="{{ logo_uri }}" alt="logo">{% endif %}
+    <div class="eve-header-right">
+      <div class="eve-date">{{ generated_at }}</div>
+      {% if total_pages > 1 %}<div class="page-num">{{ loop.index }}/{{ total_pages }}</div>{% endif %}
+    </div>
   </div>
-  <div class="eve-sig-col">
-    <div class="eve-sig-role">{{ labels.doc_received_by }}</div>
-    <div class="eve-sig-name">{{ user.display_name }}</div>
-    <div class="eve-sig-line">{{ labels.doc_signature }}: _______________</div>
+
+  <div class="eve-title">{{ labels.doc_checkout_title }}</div>
+
+  <div class="body-center">
+  <p class="condition-note">{{ labels.doc_condition_note }}</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>{{ labels.col_asset_tag }}</th>
+        <th>{{ labels.col_manufacturer }}</th>
+        <th>{{ labels.col_model }}</th>
+        <th>{{ labels.col_category }}</th>
+        <th>{{ labels.col_serial }}</th>
+        <th>{{ labels.col_checkout_date }}</th>
+        <th>{{ labels.doc_issued_by }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in page_items %}
+      {% set asset = item.asset %}
+      <tr>
+        <td>{{ asset.asset_tag }}</td>
+        <td>{{ asset.manufacturer_name }}</td>
+        <td>{{ asset.model_name }}</td>
+        <td>{{ asset.category_name }}</td>
+        <td>{{ asset.serial_display }}</td>
+        <td>
+          {% if item.activity_date %}
+            {{ item.activity_date.strftime("%Y-%m-%d") }}
+          {% elif asset.last_checkout %}
+            {{ asset.last_checkout.strftime("%Y-%m-%d") }}
+          {% else %}-{% endif %}
+        </td>
+        <td>{{ item.admin_name or "-" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
   </div>
+
+  {% if loop.last %}
+  <div class="eve-sig">
+    <div class="eve-sig-col">
+      <div class="eve-sig-role">{{ labels.doc_issued_by }}</div>
+      <div class="eve-sig-name"></div>
+      <div class="eve-sig-line">{{ labels.doc_signature }}: _______________</div>
+    </div>
+    <div class="eve-sig-col">
+      <div class="eve-sig-role">{{ labels.doc_received_by }}</div>
+      <div class="eve-sig-name">{{ user.display_name }}</div>
+      <div class="eve-sig-line">{{ labels.doc_signature }}: _______________</div>
+    </div>
+  </div>
+  {% endif %}
 </div>
-</div>
+{% endfor %}
 {% endblock %}
