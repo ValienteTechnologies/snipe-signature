@@ -6,7 +6,7 @@ Generate printable PDF checkout and return forms for [Snipe-IT](https://snipeita
 
 - Look up assets by tag, or search users by name/username/email with live autocomplete
 - Generate checkout and return forms as PDF (opens in browser for printing) or DOCX (download)
-- Two document templates: **Eve** and **Uwagi**
+- Two document templates: **Eve** and **Unagi**
 - Turkish and English language support
 - Custom logo branding per deployment
 - Cloudflare Access support for protected Snipe-IT instances

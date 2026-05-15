@@ -11,11 +11,11 @@ from __future__ import annotations
 
 # name → display label (order preserved — first entry is the default)
 TEMPLATES: dict[str, str] = {
-    "uwagi": "Uwagi",
+    "unagi": "Unagi",
     "eve": "Eve",
 }
 
-DEFAULT_TEMPLATE = "uwagi"
+DEFAULT_TEMPLATE = "unagi"
 
 
 def available_templates() -> list[tuple[str, str]]:

@@ -78,7 +78,7 @@ def build_return_docx(
     for col_idx, col_name in enumerate(columns):
         cell = tbl.rows[0].cells[col_idx]
         style_header_cell(cell, col_name)
-        if template == "uwagi":
+        if template == "unagi":
             set_cell_bg(cell, "3d5a80")
             run = cell.paragraphs[0].runs[0]
             run.font.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
@@ -109,7 +109,7 @@ def build_return_docx(
         name_label=labels.doc_name_surname,
     )
 
-    if template == "uwagi":
+    if template == "unagi":
         sig_tbl = doc.tables[-1]
         for cell in sig_tbl.rows[0].cells:
             set_cell_bg(cell, "3d5a80")

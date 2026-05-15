@@ -20,7 +20,7 @@ function submitForm(type, fmt) {
   const body = { asset_ids: ids };
   if (typeof userId !== 'undefined' && userId !== null) body.user_id = userId;
 
-  const tmpl = localStorage.getItem('doc-template') || 'uwagi';
+  const tmpl = localStorage.getItem('doc-template') || 'unagi';
   const formsBase = (typeof IS_DEMO !== 'undefined' && IS_DEMO)
     ? ROOT_PATH + '/forms/demo/' + type
     : ROOT_PATH + '/forms/' + type;
