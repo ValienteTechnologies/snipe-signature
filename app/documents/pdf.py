@@ -13,6 +13,8 @@ from app.i18n import Labels
 from app.snipeit.models import AssetWithActivity, User
 
 _TEMPLATES_DIR = Path(__file__).parent.parent / "templates" / "documents"
+ITEMS_PER_PAGE = 10
+
 _jinja_env = jinja2.Environment(
     loader=jinja2.FileSystemLoader(str(_TEMPLATES_DIR)),
     autoescape=jinja2.select_autoescape(["html"]),
@@ -49,6 +51,7 @@ def build_checkout_pdf(
             "logo_uri": logo_uri,
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "footer_text": footer_text,
+            "page_size": ITEMS_PER_PAGE,
         },
     )
 
@@ -77,5 +80,6 @@ def build_return_pdf(
             "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M"),
             "today": today_str,
             "footer_text": footer_text,
+            "page_size": ITEMS_PER_PAGE,
         },
     )
