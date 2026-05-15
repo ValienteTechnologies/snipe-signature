@@ -1,10 +1,10 @@
-"""Form generation endpoints — produce DOCX, PDF, or a ZIP of both."""
+"""Form generation endpoints — produce PDF receipts."""
 
 from __future__ import annotations
 
 import contextlib
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
 from fastapi.responses import Response, StreamingResponse
@@ -12,16 +12,13 @@ from pydantic import BaseModel
 
 from app.demo_data import DEMO_USER, filter_by_ids
 from app.dependencies import LabelsDep, SettingsDep, SnipeITDep
-from app.documents.checkout import build_checkout_docx
 from app.documents.pdf import build_checkout_pdf, build_return_pdf
 from app.documents.registry import DEFAULT_TEMPLATE, available_templates
-from app.documents.return_form import build_return_docx
 from app.snipeit.client import AssetNotFound, UserNotFound
 from app.snipeit.models import AssetWithActivity, User
 
 router = APIRouter(prefix="/forms")
 
-FormatParam = Annotated[Literal["docx", "pdf"], Query(description="Output format")]
 TemplateParam = Annotated[str, Query(description="Document template name")]
 
 
@@ -36,14 +33,13 @@ def _cleanup(*paths: Path) -> None:
             p.unlink(missing_ok=True)
 
 
-
 def _single_response(
-    path: Path, media_type: str, filename: str, background: BackgroundTasks
+    path: Path, filename: str, background: BackgroundTasks
 ) -> StreamingResponse:
     background.add_task(_cleanup, path)
     return StreamingResponse(
         open(path, "rb"),
-        media_type=media_type,
+        media_type="application/pdf",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
@@ -69,7 +65,6 @@ async def _fetch_enriched(
     # Resolve user
     user_id = body.user_id
     if user_id is None:
-        # Fall back to the assigned user of the first asset
         first = assets[0]
         if first.assigned_to and first.assigned_to.id:
             user_id = first.assigned_to.id
@@ -88,7 +83,6 @@ async def _fetch_enriched(
 @router.post("/checkout")
 async def checkout_form(
     body: FormRequest,
-    fmt: FormatParam = "pdf",
     template: TemplateParam = DEFAULT_TEMPLATE,
     snipeit: SnipeITDep = ...,
     labels: LabelsDep = ...,
@@ -96,22 +90,14 @@ async def checkout_form(
     background: BackgroundTasks = ...,
 ) -> Response:
     enriched, user = await _fetch_enriched(snipeit, body)
-    logo = settings.logo_path
-    footer = settings.doc_footer_text
     safe_name = (user.username or str(user.id)).replace(" ", "_")
-
-    if fmt == "docx":
-        path = build_checkout_docx(enriched, user, labels, logo, template, footer)
-        return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"checkout_{safe_name}.docx", background)
-
-    path = build_checkout_pdf(enriched, user, labels, logo, template, footer)
-    return _single_response(path, "application/pdf", f"checkout_{safe_name}.pdf", background)
+    path = build_checkout_pdf(enriched, user, labels, settings.logo_path, template, settings.doc_footer_text)
+    return _single_response(path, f"checkout_{safe_name}.pdf", background)
 
 
 @router.post("/demo/checkout")
 async def demo_checkout_form(
     body: FormRequest,
-    fmt: FormatParam = "pdf",
     template: TemplateParam = DEFAULT_TEMPLATE,
     labels: LabelsDep = ...,
     settings: SettingsDep = ...,
@@ -122,21 +108,13 @@ async def demo_checkout_form(
     enriched = filter_by_ids(body.asset_ids)
     if not enriched:
         raise HTTPException(status_code=400, detail="No valid demo assets provided.")
-    logo = settings.logo_path
-    footer = settings.doc_footer_text
-
-    if fmt == "docx":
-        path = build_checkout_docx(enriched, DEMO_USER, labels, logo, template, footer)
-        return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "checkout_demo.docx", background)
-
-    path = build_checkout_pdf(enriched, DEMO_USER, labels, logo, template, footer)
-    return _single_response(path, "application/pdf", "checkout_demo.pdf", background)
+    path = build_checkout_pdf(enriched, DEMO_USER, labels, settings.logo_path, template, settings.doc_footer_text)
+    return _single_response(path, "checkout_demo.pdf", background)
 
 
 @router.post("/demo/return")
 async def demo_return_form(
     body: FormRequest,
-    fmt: FormatParam = "pdf",
     template: TemplateParam = DEFAULT_TEMPLATE,
     labels: LabelsDep = ...,
     settings: SettingsDep = ...,
@@ -147,21 +125,13 @@ async def demo_return_form(
     enriched = filter_by_ids(body.asset_ids)
     if not enriched:
         raise HTTPException(status_code=400, detail="No valid demo assets provided.")
-    logo = settings.logo_path
-    footer = settings.doc_footer_text
-
-    if fmt == "docx":
-        path = build_return_docx(enriched, DEMO_USER, labels, logo, template, footer)
-        return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "return_demo.docx", background)
-
-    path = build_return_pdf(enriched, DEMO_USER, labels, logo, template, footer)
-    return _single_response(path, "application/pdf", "return_demo.pdf", background)
+    path = build_return_pdf(enriched, DEMO_USER, labels, settings.logo_path, template, settings.doc_footer_text)
+    return _single_response(path, "return_demo.pdf", background)
 
 
 @router.post("/return")
 async def return_form(
     body: FormRequest,
-    fmt: FormatParam = "pdf",
     template: TemplateParam = DEFAULT_TEMPLATE,
     snipeit: SnipeITDep = ...,
     labels: LabelsDep = ...,
@@ -169,13 +139,6 @@ async def return_form(
     background: BackgroundTasks = ...,
 ) -> Response:
     enriched, user = await _fetch_enriched(snipeit, body)
-    logo = settings.logo_path
-    footer = settings.doc_footer_text
     safe_name = (user.username or str(user.id)).replace(" ", "_")
-
-    if fmt == "docx":
-        path = build_return_docx(enriched, user, labels, logo, template, footer)
-        return _single_response(path, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", f"return_{safe_name}.docx", background)
-
-    path = build_return_pdf(enriched, user, labels, logo, template, footer)
-    return _single_response(path, "application/pdf", f"return_{safe_name}.pdf", background)
+    path = build_return_pdf(enriched, user, labels, settings.logo_path, template, settings.doc_footer_text)
+    return _single_response(path, f"return_{safe_name}.pdf", background)

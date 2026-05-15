@@ -2,9 +2,7 @@
 
 To add a new template:
 1. Add its name → label entry to TEMPLATES.
-2. Create the HTML files: doc_checkout_{name}.html and doc_return_{name}.html
-   (they extend doc_base.html just like the default ones).
-3. If the DOCX layout should differ, add a branch in checkout.py / return_form.py.
+2. Create the HTML files under app/templates/documents/{name}/checkout.html and return.html.
 """
 
 from __future__ import annotations

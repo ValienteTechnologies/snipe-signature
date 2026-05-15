@@ -85,7 +85,6 @@
     {% if checkout_enriched %}
       {{ asset_table(checkout_enriched, "checkout", labels, rfid_enabled) }}
       <div class="actions">
-        <button class="btn btn-docx" onclick="submitForm('checkout', 'docx')">DOCX</button>
         <button class="btn btn-pdf" onclick="submitForm('checkout', 'pdf')">PDF</button>
       </div>
     {% else %}
@@ -97,7 +96,6 @@
     {% if return_enriched %}
       {{ asset_table(return_enriched, "return", labels, rfid_enabled) }}
       <div class="actions">
-        <button class="btn btn-docx" onclick="submitForm('return', 'docx')">DOCX</button>
         <button class="btn btn-pdf" onclick="submitForm('return', 'pdf')">PDF</button>
       </div>
     {% else %}
@@ -109,7 +107,6 @@
   {% if checkout_enriched %}
     {{ asset_table(checkout_enriched, "checkout", labels, rfid_enabled) }}
     <div class="actions">
-      <button class="btn btn-docx" onclick="submitForm('checkout', 'docx')">DOCX</button>
       <button class="btn btn-pdf" onclick="submitForm('checkout', 'pdf')">PDF</button>
     </div>
   {% else %}

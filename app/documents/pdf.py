@@ -2,13 +2,30 @@
 
 from __future__ import annotations
 
+import os
+import tempfile
 from pathlib import Path
 
 import jinja2
 from weasyprint import HTML
 
-from app.documents.base import make_temp_file, resolve_logo
 from app.documents.registry import checkout_pdf_template, return_pdf_template
+
+_DEFAULT_LOGO = Path(__file__).parent.parent / "static" / "logo_placeholder.png"
+
+
+def resolve_logo(logo_path: Path | None) -> Path | None:
+    if logo_path and logo_path.is_file():
+        return logo_path
+    if _DEFAULT_LOGO.is_file():
+        return _DEFAULT_LOGO
+    return None
+
+
+def make_temp_file(suffix: str) -> Path:
+    fd, tmp = tempfile.mkstemp(suffix=suffix)
+    os.close(fd)
+    return Path(tmp)
 from app.i18n import Labels
 from app.snipeit.models import AssetWithActivity, User
 
